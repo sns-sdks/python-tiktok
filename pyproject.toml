@@ -1,0 +1,34 @@
+[tool.poetry]
+name = "python-tiktok"
+version = "0.1.0"
+description = "A simple Python wrapper for Tiktok API. ✨ 🍰 ✨"
+authors = ["ikaroskun <merle.liukun@gmail.com>"]
+license = "MIT"
+readme = "README.rst"
+repository = "https://github.com/sns-sdks/python-tiktok"
+keywords = ["tiktok", "tiktok sdk", "tiktok api"]
+classifiers = [
+    "Programming Language :: Python :: Implementation :: CPython",
+    "Programming Language :: Python :: 3.6",
+    "Programming Language :: Python :: 3.7",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Intended Audience :: Developers",
+]
+packages = [
+    { include = "pytiktok"},
+]
+
+[tool.poetry.dependencies]
+python = "^3.6.2"
+requests = "^2.24"
+dataclasses-json = "^0.5.7"
+
+[tool.poetry.dev-dependencies]
+pytest = "^6.2.5"
+black = "^22.3.0"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
