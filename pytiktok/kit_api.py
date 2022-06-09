@@ -3,7 +3,7 @@
 """
 import random
 import string
-from typing import Optional, List, Tuple, Union
+from typing import Optional, List, Tuple, Union, IO
 
 import requests
 from requests import Request, Response
@@ -221,6 +221,8 @@ class KitApi:
         path: str,
         verb: str = "POST",
         params: Optional[dict] = None,
+        data: Optional[dict] = None,
+        files: Optional[dict] = None,
         json: Optional[dict] = None,
         enforce_auth: bool = True,
     ) -> Response:
@@ -229,6 +231,8 @@ class KitApi:
         :param path: The api location for TikTok
         :param verb: HTTP Method, like GET,POST,PUT.
         :param params: The url params to send in the body of the request.
+        :param data: The form data to send in the body of the request.
+        :param files: The form files to send in the body of the request.
         :param json: The json data to send in the body of the request.
         :param enforce_auth: Does the request require authentication.
         :return: A json object
@@ -239,6 +243,8 @@ class KitApi:
                 raise PyTiktokError("The request must be authenticated.")
             if json is not None:
                 json["access_token"] = self.access_token
+            elif params is not None:
+                params["access_token"] = self.access_token
 
         if not path.startswith("http"):
             path = f"{self.base_url}/{path}"
@@ -248,6 +254,8 @@ class KitApi:
             method=verb,
             headers=headers,
             params=params,
+            data=data,
+            files=files,
             json=json,
             timeout=self.timeout,
             proxies=self.proxies,
@@ -338,8 +346,8 @@ class KitApi:
         :param filter: Fields: video_ids: set<string>, max 20 video ids at a time.
             Example: {"video_ids": ["6963640889373723909"]}
         :param fields: The set of optional video metadata.
-        :param return_json:
-        :return:
+        :param return_json: Type for returned data. If you set True JSON data will be returned.
+        :return: Videos data.
         """
         if fields is None:
             fields = ["id", "create_time", "duration", "share_url"]
@@ -350,3 +358,27 @@ class KitApi:
         )
         data = self.parse_response(resp)
         return data if return_json else mds.KitVideosResponse.new_from_json_dict(data)
+
+    def share_video(
+        self,
+        open_id: str,
+        video: IO,
+        return_json: bool = False,
+    ) -> Union[mds.KitShareVideoResponse, dict]:
+        """
+        Share Video API allows users to share videos from your Web or Desktop app into TikTok.
+
+        :param open_id: The TikTok user's unique identifier.
+        :param video: The video file obj.
+        :param return_json: Type for returned data. If you set True JSON data will be returned.
+        :return: Share response.
+        """
+        resp = self._request(
+            path="share/video/upload/",
+            params={"open_id": open_id},
+            files={"video": video},
+        )
+        data = self.parse_response(resp)
+        return (
+            data if return_json else mds.KitShareVideoResponse.new_from_json_dict(data)
+        )

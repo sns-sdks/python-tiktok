@@ -40,7 +40,7 @@ class KitQrCodeData(BaseModel):
     description: Optional[str] = field(default=None)
 
 
-class KitQrCodeExtra(BaseModel):
+class KitResponseExtra(BaseModel):
     error_detail: Optional[str] = field(default=None)
     logid: Optional[int] = field(default=None)
 
@@ -51,7 +51,7 @@ class KitQrCodeResponse(BaseModel):
     """
 
     data: Optional[KitQrCodeData] = field(default=None)
-    extra: Optional[KitQrCodeExtra] = field(default=None)
+    extra: Optional[KitResponseExtra] = field(default=None)
     message: Optional[str] = field(default=None)
 
 
@@ -115,3 +115,14 @@ class KitVideosData(BaseModel):
 class KitVideosResponse(BaseModel):
     data: Optional[KitVideosData] = field(default=None)
     error: Optional[KitResponseError] = field(default=None)
+
+
+class KitShareVideoData(BaseModel):
+    share_id: Optional[str] = field(default=None)
+    error_code: Optional[int] = field(default=None)
+    error_msg: Optional[KitVideosData] = field(default=None)
+
+
+class KitShareVideoResponse(BaseModel):
+    data: Optional[KitShareVideoData] = field(default=None)
+    extra: Optional[KitResponseExtra] = field(default=None)
