@@ -1,12 +1,13 @@
 """
     Models for TikTok kit api.
 """
-from dataclasses import field
+from dataclasses import dataclass, field
 from typing import Optional, List
 
 from .base import BaseModel
 
 
+@dataclass
 class KitAccessToken(BaseModel):
     """
     Refer: https://developers.tiktok.com/doc/login-kit-manage-user-access-tokens
@@ -25,11 +26,13 @@ class KitAccessToken(BaseModel):
     log_id: Optional[str] = field(default=None, repr=False)
 
 
+@dataclass
 class KitAccessTokenResponse(BaseModel):
     data: Optional[KitAccessToken] = field(default=None)
     message: Optional[str] = field(default=None)
 
 
+@dataclass
 class KitQrCodeData(BaseModel):
     scan_qrcode_url: Optional[str] = field(default=None)
     token: Optional[str] = field(default=None)
@@ -40,11 +43,13 @@ class KitQrCodeData(BaseModel):
     description: Optional[str] = field(default=None)
 
 
+@dataclass
 class KitResponseExtra(BaseModel):
     error_detail: Optional[str] = field(default=None)
     logid: Optional[int] = field(default=None)
 
 
+@dataclass
 class KitQrCodeResponse(BaseModel):
     """
     Refer: https://developers.tiktok.com/doc/login-kit-qr-code-authorization
@@ -55,6 +60,7 @@ class KitQrCodeResponse(BaseModel):
     message: Optional[str] = field(default=None)
 
 
+@dataclass
 class KitUser(BaseModel):
     """
     Refer: https://developers.tiktok.com/doc/login-kit-user-info-basic
@@ -69,21 +75,25 @@ class KitUser(BaseModel):
     avatar_large_url: Optional[str] = field(default=None, repr=False)
 
 
+@dataclass
 class KitResponseError(BaseModel):
     code: Optional[int] = field(default=None)
     message: Optional[str] = field(default=None)
     log_id: Optional[str] = field(default=None, repr=False)
 
 
+@dataclass
 class KitUserData(BaseModel):
     user: Optional[KitUser] = field(default=None)
 
 
+@dataclass
 class KitUserResponse(BaseModel):
     data: Optional[KitUserData] = field(default=None)
     error: Optional[KitResponseError] = field(default=None)
 
 
+@dataclass
 class KitVideo(BaseModel):
     """
     Refer: https://developers.tiktok.com/doc/login-kit-video-list
@@ -106,23 +116,27 @@ class KitVideo(BaseModel):
     view_count: Optional[int] = field(default=None, repr=False)
 
 
+@dataclass
 class KitVideosData(BaseModel):
     videos: Optional[List[KitVideo]] = field(default=None)
     cursor: Optional[int] = field(default=None)
     has_more: Optional[bool] = field(default=None)
 
 
+@dataclass
 class KitVideosResponse(BaseModel):
     data: Optional[KitVideosData] = field(default=None)
     error: Optional[KitResponseError] = field(default=None)
 
 
+@dataclass
 class KitShareVideoData(BaseModel):
     share_id: Optional[str] = field(default=None)
     error_code: Optional[int] = field(default=None)
     error_msg: Optional[KitVideosData] = field(default=None)
 
 
+@dataclass
 class KitShareVideoResponse(BaseModel):
     data: Optional[KitShareVideoData] = field(default=None)
     extra: Optional[KitResponseExtra] = field(default=None)

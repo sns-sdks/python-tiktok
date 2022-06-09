@@ -37,7 +37,7 @@ class BusinessAccountApi:
 
     def generate_access_token(
         self, code: str, return_json: bool = False
-    ) -> Union[mds.AccessToken, dict]:
+    ) -> Union[mds.BusinessAccessToken, dict]:
         """
         Generate access token by the auth code.
         :param code: The code when user logged into TikTok and authorized your application for access to their account insights.
@@ -48,7 +48,7 @@ class BusinessAccountApi:
             raise PyTiktokError(f"Need app id and app secret.")
         resp = self._request(
             verb="POST",
-            path="oauth2/token/",
+            path=f"{self.base_url}/oauth2/token/",
             params={"business": "tt_user"},
             json={
                 "client_id": self.app_id,
@@ -59,11 +59,11 @@ class BusinessAccountApi:
             enforce_auth=False,
         )
         data = self.parse_response(response=resp)
-        return data if return_json else mds.AccessToken.new_from_json_dict(data)
+        return data if return_json else mds.BusinessAccessToken.new_from_json_dict(data)
 
     def refresh_access_token(
         self, refresh_token: str, return_json: bool = False
-    ) -> Union[mds.AccessToken, dict]:
+    ) -> Union[mds.BusinessAccessToken, dict]:
         """
         Generate access token by the refresh token.
         :param refresh_token: The refresh token for exchange access token.
@@ -74,7 +74,7 @@ class BusinessAccountApi:
             raise PyTiktokError(f"Need app id and app secret.")
         resp = self._request(
             verb="POST",
-            path="oauth2/token/",
+            path=f"{self.base_url}/oauth2/token/",
             params={"business": "tt_user"},
             json={
                 "client_id": self.app_id,
@@ -85,7 +85,7 @@ class BusinessAccountApi:
             enforce_auth=False,
         )
         data = self.parse_response(response=resp)
-        return data if return_json else mds.AccessToken.new_from_json_dict(data)
+        return data if return_json else mds.BusinessAccessToken.new_from_json_dict(data)
 
     def _request(
         self,
@@ -144,7 +144,7 @@ class BusinessAccountApi:
         end_date: Optional[str] = None,
         fields: Optional[list] = None,
         return_json: bool = False,
-    ) -> Union[mds.AccountResponse, dict]:
+    ) -> Union[mds.BusinessAccountResponse, dict]:
         """
         Access detailed analytics and insights about a TikTok business account's follower base and profile engagement.
 
@@ -166,7 +166,11 @@ class BusinessAccountApi:
 
         resp = self._request(verb="POST", path="/business/get/", json=data)
         data = self.parse_response(resp)
-        return data if return_json else mds.AccountResponse.new_from_json_dict(data)
+        return (
+            data
+            if return_json
+            else mds.BusinessAccountResponse.new_from_json_dict(data)
+        )
 
     def get_account_videos(
         self,
@@ -176,7 +180,7 @@ class BusinessAccountApi:
         cursor: Optional[int] = None,
         max_count: Optional[int] = None,
         return_json: bool = False,
-    ) -> Union[mds.VideosResponse, dict]:
+    ) -> Union[mds.BusinessVideosResponse, dict]:
         """
         Get reach and engagement data for a business accounts organic posts.
 
@@ -201,7 +205,9 @@ class BusinessAccountApi:
 
         resp = self._request(verb="POST", path="business/videos/list/", json=data)
         data = self.parse_response(resp)
-        return data if return_json else mds.VideosResponse.new_from_json_dict(data)
+        return (
+            data if return_json else mds.BusinessVideosResponse.new_from_json_dict(data)
+        )
 
     def create_video(
         self,
@@ -209,7 +215,7 @@ class BusinessAccountApi:
         video_url: str,
         post_info: Optional[dict] = None,
         return_json: bool = False,
-    ) -> Union[mds.VideoPublishResponse, dict]:
+    ) -> Union[mds.BusinessVideoPublishResponse, dict]:
         """
         Publish a public video to an owned account.
 
@@ -230,7 +236,9 @@ class BusinessAccountApi:
         resp = self._request(verb="POST", path="business/videos/publish/", json=data)
         data = self.parse_response(resp)
         return (
-            data if return_json else mds.VideoPublishResponse.new_from_json_dict(data)
+            data
+            if return_json
+            else mds.BusinessVideoPublishResponse.new_from_json_dict(data)
         )
 
     def get_video_comments(
@@ -243,7 +251,7 @@ class BusinessAccountApi:
         cursor: Optional[int] = None,
         max_count: Optional[int] = None,
         return_json: bool = False,
-    ) -> Union[mds.CommentsResponse, dict]:
+    ) -> Union[mds.BusinessCommentsResponse, dict]:
         """
         Access all the comments (along with related information) - both public and hidden -
         that have been created against a specific organic video posted by an owned business account.
@@ -272,7 +280,11 @@ class BusinessAccountApi:
 
         resp = self._request(verb="POST", path="business/comments/list/", json=data)
         data = self.parse_response(resp)
-        return data if return_json else mds.CommentsResponse.new_from_json_dict(data)
+        return (
+            data
+            if return_json
+            else mds.BusinessCommentsResponse.new_from_json_dict(data)
+        )
 
     def get_comment_replies(
         self,
@@ -285,7 +297,7 @@ class BusinessAccountApi:
         cursor: Optional[int] = None,
         max_count: Optional[int] = None,
         return_json: bool = False,
-    ) -> Union[mds.CommentsResponse, dict]:
+    ) -> Union[mds.BusinessCommentsResponse, dict]:
         """
         Access all replies to a specific comment (along with related information) - both public and hidden -
         that have been created against a comment on an organic video posted by an owned business account.
@@ -321,11 +333,15 @@ class BusinessAccountApi:
             verb="POST", path="business/comments/replies/list/", json=data
         )
         data = self.parse_response(resp)
-        return data if return_json else mds.CommentsResponse.new_from_json_dict(data)
+        return (
+            data
+            if return_json
+            else mds.BusinessCommentsResponse.new_from_json_dict(data)
+        )
 
     def create_comment(
         self, business_id: str, video_id: str, text: str, return_json: bool = False
-    ) -> Union[mds.CommentResponse, dict]:
+    ) -> Union[mds.BusinessCommentResponse, dict]:
         """
         :param business_id: Application specific unique identifier for the TikTok account.
         :param video_id: Unique identifier for owned TikTok video to create comments on.
@@ -336,7 +352,11 @@ class BusinessAccountApi:
         data = {"business_id": business_id, "video_id": video_id, "text": text}
         resp = self._request(verb="POST", path="business/comments/create/", json=data)
         data = self.parse_response(resp)
-        return data if return_json else mds.CommentResponse.new_from_json_dict(data)
+        return (
+            data
+            if return_json
+            else mds.BusinessCommentResponse.new_from_json_dict(data)
+        )
 
     def create_reply(
         self,
@@ -345,7 +365,7 @@ class BusinessAccountApi:
         comment_id: str,
         text: str,
         return_json: bool = False,
-    ) -> Union[mds.CommentResponse, dict]:
+    ) -> Union[mds.BusinessCommentResponse, dict]:
         """
         :param business_id: Application specific unique identifier for the TikTok account.
         :param video_id: Unique identifier for owned TikTok video to create comments on.
@@ -364,7 +384,11 @@ class BusinessAccountApi:
             verb="POST", path="business/comments/replies/create/", json=data
         )
         data = self.parse_response(resp)
-        return data if return_json else mds.CommentResponse.new_from_json_dict(data)
+        return (
+            data
+            if return_json
+            else mds.BusinessCommentResponse.new_from_json_dict(data)
+        )
 
     def like_comment(
         self,
@@ -372,7 +396,7 @@ class BusinessAccountApi:
         comment_id: str,
         action: str = "like",
         return_json: bool = False,
-    ) -> Union[mds.BaseResponse, dict]:
+    ) -> Union[mds.BusinessBaseResponse, dict]:
         """
         Like/unlike an existing comment on an organic video posted by an owned business account.
 
@@ -385,7 +409,9 @@ class BusinessAccountApi:
         data = {"business_id": business_id, "comment_id": comment_id, "action": action}
         resp = self._request(verb="POST", path="business/comments/like/", json=data)
         data = self.parse_response(resp)
-        return data if return_json else mds.BaseResponse.new_from_json_dict(data)
+        return (
+            data if return_json else mds.BusinessBaseResponse.new_from_json_dict(data)
+        )
 
     def pin_comment(
         self,
@@ -393,7 +419,7 @@ class BusinessAccountApi:
         comment_id: str,
         action: str = "pin",
         return_json: bool = False,
-    ) -> Union[mds.BaseResponse, dict]:
+    ) -> Union[mds.BusinessBaseResponse, dict]:
         """
         Pin/unpin an existing comment on an organic video posted by an owned business account.
 
@@ -406,7 +432,9 @@ class BusinessAccountApi:
         data = {"business_id": business_id, "comment_id": comment_id, "action": action}
         resp = self._request(verb="POST", path="business/comments/like/", json=data)
         data = self.parse_response(resp)
-        return data if return_json else mds.BaseResponse.new_from_json_dict(data)
+        return (
+            data if return_json else mds.BusinessBaseResponse.new_from_json_dict(data)
+        )
 
     def hide_comment(
         self,
@@ -414,7 +442,7 @@ class BusinessAccountApi:
         comment_id: str,
         action: str = "hide",
         return_json: bool = False,
-    ) -> Union[mds.BaseResponse, dict]:
+    ) -> Union[mds.BusinessBaseResponse, dict]:
         """
         Hide/unhide an existing comment on an organic video posted by an owned business account.
 
@@ -427,11 +455,13 @@ class BusinessAccountApi:
         data = {"business_id": business_id, "comment_id": comment_id, "action": action}
         resp = self._request(verb="POST", path="business/comments/hide/", json=data)
         data = self.parse_response(resp)
-        return data if return_json else mds.BaseResponse.new_from_json_dict(data)
+        return (
+            data if return_json else mds.BusinessBaseResponse.new_from_json_dict(data)
+        )
 
     def delete_comment(
         self, business_id: str, comment_id: str, return_json: bool = False
-    ) -> Union[mds.BaseResponse, dict]:
+    ) -> Union[mds.BusinessBaseResponse, dict]:
         """
         Delete an owned comment on an organic video posted by an owned business account.
 
@@ -443,4 +473,6 @@ class BusinessAccountApi:
         data = {"business_id": business_id, "comment_id": comment_id}
         resp = self._request(verb="POST", path="business/comments/delete/", json=data)
         data = self.parse_response(resp)
-        return data if return_json else mds.BaseResponse.new_from_json_dict(data)
+        return (
+            data if return_json else mds.BusinessBaseResponse.new_from_json_dict(data)
+        )

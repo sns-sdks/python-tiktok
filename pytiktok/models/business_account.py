@@ -8,13 +8,15 @@ from typing import List, Optional
 from .base import BaseModel
 
 
-class BaseResponse(BaseModel):
-    code: int = field()
-    message: str = field()
-    request_id: str = field()
+@dataclass
+class BusinessBaseResponse(BaseModel):
+    code: Optional[int] = field(default=None)
+    message: Optional[str] = field(default=None)
+    request_id: Optional[str] = field(default=None)
 
 
-class AccessToken(BaseModel):
+@dataclass
+class BusinessAccessToken(BaseModel):
     """
     Refer: https://ads.tiktok.com/marketing_api/docs?id=1733224966619138
     """
@@ -28,22 +30,26 @@ class AccessToken(BaseModel):
     creator_id: Optional[str] = field(default=None, repr=False)
 
 
-class AccountAudienceCountry(BaseModel):
+@dataclass
+class BusinessAccountAudienceCountry(BaseModel):
     country: Optional[str] = field(default=None)
     percentage: Optional[float] = field(default=None)
 
 
-class AccountAudienceGender(BaseModel):
+@dataclass
+class BusinessAccountAudienceGender(BaseModel):
     gender: Optional[str] = field(default=None)
     percentage: Optional[float] = field(default=None)
 
 
-class AccountMetricAudienceActivity(BaseModel):
+@dataclass
+class BusinessAccountMetricAudienceActivity(BaseModel):
     hour: Optional[str] = field(default=None)
     count: Optional[int] = field(default=None)
 
 
-class AccountMetric(BaseModel):
+@dataclass
+class BusinessAccountMetric(BaseModel):
     date: Optional[str] = field(default=None)
     followers_count: Optional[int] = field(default=None)
     profile_views: Optional[int] = field(default=None)
@@ -51,12 +57,13 @@ class AccountMetric(BaseModel):
     likes: Optional[int] = field(default=None)
     comments: Optional[int] = field(default=None)
     shares: Optional[int] = field(default=None)
-    audience_activity: Optional[List[AccountMetricAudienceActivity]] = field(
+    audience_activity: Optional[List[BusinessAccountMetricAudienceActivity]] = field(
         default=None, repr=False
     )
 
 
-class Account(BaseModel):
+@dataclass
+class BusinessAccount(BaseModel):
     """
     Refer: https://ads.tiktok.com/marketing_api/docs?id=1733326495444994
     """
@@ -65,30 +72,34 @@ class Account(BaseModel):
     display_name: Optional[str] = field(default=None)
     profile_image: Optional[str] = field(default=None)
     followers_count: Optional[int] = field(default=None)
-    audience_countries: Optional[List[AccountAudienceCountry]] = field(
+    audience_countries: Optional[List[BusinessAccountAudienceCountry]] = field(
         default=None, repr=False
     )
-    audience_genders: Optional[List[AccountAudienceGender]] = field(
+    audience_genders: Optional[List[BusinessAccountAudienceGender]] = field(
         default=None, repr=False
     )
-    metrics: Optional[List[AccountMetric]] = field(default=None, repr=False)
+    metrics: Optional[List[BusinessAccountMetric]] = field(default=None, repr=False)
 
 
-class AccountResponse(BaseResponse):
-    data: Optional[Account] = field(default=None)
+@dataclass
+class BusinessAccountResponse(BusinessBaseResponse):
+    data: Optional[BusinessAccount] = field(default=None)
 
 
-class VideoImpressionSource(BaseModel):
+@dataclass
+class BusinessVideoImpressionSource(BaseModel):
     impression_source: Optional[str] = field(default=None)
     percentage: Optional[float] = field(default=None)
 
 
-class VideoAudienceCountry(BaseModel):
+@dataclass
+class BusinessVideoAudienceCountry(BaseModel):
     country: Optional[str] = field(default=None)
     percentage: Optional[float] = field(default=None)
 
 
-class Video(BaseModel):
+@dataclass
+class BusinessVideo(BaseModel):
     """
     Refer: https://ads.tiktok.com/marketing_api/docs?id=1733327057319937
     """
@@ -108,25 +119,28 @@ class Video(BaseModel):
     full_video_watched_rate: Optional[float] = field(default=None, repr=False)
     total_time_watched: Optional[float] = field(default=None, repr=False)
     average_time_watched: Optional[float] = field(default=None, repr=False)
-    impression_sources: Optional[VideoImpressionSource] = field(
+    impression_sources: Optional[BusinessVideoImpressionSource] = field(
         default=None, repr=False
     )
-    audience_countries: Optional[List[VideoAudienceCountry]] = field(
+    audience_countries: Optional[List[BusinessVideoAudienceCountry]] = field(
         default=None, repr=False
     )
 
 
-class VideosData(BaseModel):
-    videos: Optional[Video] = field(default=None)
+@dataclass
+class BusinessVideosData(BaseModel):
+    videos: Optional[List[BusinessVideo]] = field(default=None)
     cursor: Optional[int] = field(default=None)
     has_more: Optional[bool] = field(default=None)
 
 
-class VideosResponse(BaseResponse):
-    data: Optional[VideosData] = field(default=None)
+@dataclass
+class BusinessVideosResponse(BusinessBaseResponse):
+    data: Optional[BusinessVideosData] = field(default=None)
 
 
-class VideoPublish(BaseResponse):
+@dataclass
+class BusinessVideoPublish(BusinessBaseResponse):
     """
     Refer: https://ads.tiktok.com/marketing_api/docs?id=1733584024973313
     """
@@ -134,11 +148,13 @@ class VideoPublish(BaseResponse):
     share_id: Optional[str] = field(default=None)
 
 
-class VideoPublishResponse(BaseResponse):
-    data: Optional[VideoPublish] = field(default=None)
+@dataclass
+class BusinessVideoPublishResponse(BusinessBaseResponse):
+    data: Optional[BusinessVideoPublish] = field(default=None)
 
 
-class Comment(BaseModel):
+@dataclass
+class BusinessComment(BaseModel):
     """
     Refer: https://ads.tiktok.com/marketing_api/docs?id=1733329505077250
     """
@@ -158,15 +174,18 @@ class Comment(BaseModel):
     profile_image: Optional[str] = field(default=None, repr=False)
 
 
-class CommentsData(BaseModel):
-    comments: Optional[Comment] = field(default=None)
+@dataclass
+class BusinessCommentsData(BaseModel):
+    comments: Optional[List[BusinessComment]] = field(default=None)
     cursor: Optional[int] = field(default=None)
     has_more: Optional[bool] = field(default=None)
 
 
-class CommentResponse(BaseResponse):
-    data: Optional[Comment] = field(default=None)
+@dataclass
+class BusinessCommentResponse(BusinessBaseResponse):
+    data: Optional[BusinessComment] = field(default=None)
 
 
-class CommentsResponse(BaseResponse):
-    data: Optional[CommentsData] = field(default=None)
+@dataclass
+class BusinessCommentsResponse(BusinessBaseResponse):
+    data: Optional[BusinessCommentsData] = field(default=None)
