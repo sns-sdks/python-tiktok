@@ -135,6 +135,10 @@ class BusinessAccountApi:
         except ValueError:
             raise PyTiktokError(f"Unknown error: {response.content}")
 
+        # error handler
+        if "code" in data and data["code"] != 0:
+            raise PyTiktokError(data)
+
         return data
 
     def get_account_data(

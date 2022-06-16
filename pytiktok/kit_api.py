@@ -269,7 +269,8 @@ class KitApi:
             data = response.json()
         except ValueError:
             raise PyTiktokError(f"Unknown error: {response.content}")
-
+        if "error" in data:
+            raise PyTiktokError(data["error"])
         return data
 
     def get_user_info(
