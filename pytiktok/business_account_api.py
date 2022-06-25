@@ -398,7 +398,7 @@ class BusinessAccountApi:
         self,
         business_id: str,
         comment_id: str,
-        action: str = "like",
+        action: str = "LIKE",
         return_json: bool = False,
     ) -> Union[mds.BusinessBaseResponse, dict]:
         """
@@ -406,7 +406,7 @@ class BusinessAccountApi:
 
         :param business_id: Application specific unique identifier for the TikTok account.
         :param comment_id: Unique identifier for comment on an owned TikTok video to like/unlike.
-        :param action: Specific operation to be performed on the comment. ["like", "unlike"].
+        :param action: Specific operation to be performed on the comment. ["LIKE", "UNLIKE"].
         :param return_json: Type for returned data. If you set True JSON data will be returned.
         :return: Comment like status response.
         """
@@ -420,21 +420,28 @@ class BusinessAccountApi:
     def pin_comment(
         self,
         business_id: str,
+        video_id: str,
         comment_id: str,
-        action: str = "pin",
+        action: str = "PIN",
         return_json: bool = False,
     ) -> Union[mds.BusinessBaseResponse, dict]:
         """
         Pin/unpin an existing comment on an organic video posted by an owned business account.
 
         :param business_id: Application specific unique identifier for the TikTok account.
+        :param video_id: Unique identifier for owned TikTok video to create comments on.
         :param comment_id: Unique identifier for comment on an owned TikTok video to pin/unpin.
-        :param action: Specific operation to be performed on the comment. ["pin", "unpin"].
+        :param action: Specific operation to be performed on the comment. ["PIN", "UNPIN"].
         :param return_json: Type for returned data. If you set True JSON data will be returned.
         :return: Comment pin status response.
         """
-        data = {"business_id": business_id, "comment_id": comment_id, "action": action}
-        resp = self._request(verb="POST", path="business/comments/like/", json=data)
+        data = {
+            "business_id": business_id,
+            "video_id": video_id,
+            "comment_id": comment_id,
+            "action": action,
+        }
+        resp = self._request(verb="POST", path="business/comments/pin/", json=data)
         data = self.parse_response(resp)
         return (
             data if return_json else mds.BusinessBaseResponse.new_from_json_dict(data)
@@ -443,20 +450,27 @@ class BusinessAccountApi:
     def hide_comment(
         self,
         business_id: str,
+        video_id: str,
         comment_id: str,
-        action: str = "hide",
+        action: str = "HIDE",
         return_json: bool = False,
     ) -> Union[mds.BusinessBaseResponse, dict]:
         """
         Hide/unhide an existing comment on an organic video posted by an owned business account.
 
         :param business_id: Application specific unique identifier for the TikTok account.
-        :param comment_id: Unique identifier for comment on an owned TikTok video to like/unlike.
-        :param action: Specific operation to be performed on the comment. ["hide", "unhide"].
+        :param video_id: Unique identifier for owned TikTok video to create comments on.
+        :param comment_id: Unique identifier for comment on an owned TikTok video to hide/unhide.
+        :param action: Specific operation to be performed on the comment. ["HIDE", "UNHIDE"].
         :param return_json: Type for returned data. If you set True JSON data will be returned.
         :return: Comment hide status response.
         """
-        data = {"business_id": business_id, "comment_id": comment_id, "action": action}
+        data = {
+            "business_id": business_id,
+            "video_id": video_id,
+            "comment_id": comment_id,
+            "action": action,
+        }
         resp = self._request(verb="POST", path="business/comments/hide/", json=data)
         data = self.parse_response(resp)
         return (
