@@ -31,10 +31,13 @@ nav:
   - Introduction: index.md
   - Installation: installation.md
   - Authorization:
-      - Kit: kit-authorization.md
-      - Business: business-authorization.md
+      - Business: authorization/business-authorization.md
   - Usage:
       - Preparation: usage/preparation.md
+      - Business:
+          - Account: usage/business_account/account.md
+          - Video: usage/business_account/video.md
+          - Comment: usage/business_account/comment.md
   - Changelog: CHANGELOG.md
 
 extra:
