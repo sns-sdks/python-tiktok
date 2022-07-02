@@ -6,6 +6,10 @@ A simple Python wrapper around for Tiktok API :sparkles: :cake: :sparkles:.
    :target: https://developers.tiktok.com/
    :alt: tiktok
 
+.. image:: https://img.shields.io/pypi/v/python-tiktok.svg
+    :target: https://pypi.org/project/python-tiktok/
+    :alt: PyPI
+
 ============
 Introduction
 ============
@@ -25,7 +29,7 @@ You can install this library easily by `pypi`:
 
 .. code-block:: shell
 
-    $ pip install python-twitter-v2
+    $ pip install python-tiktok
 
 More installing detail see `Installation docs <https://sns-sdks.lkhardy.cn/python-tiktok/installation/>`_
 

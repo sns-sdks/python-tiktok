@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.1.3](https://github.com/sns-sdks/python-tiktok/v0.1.3) (2022-07-02)
+
+### Fix
+
+- Kit api errors
+- update docs
+
 ## [0.1.2](https://github.com/sns-sdks/python-tiktok/v0.1.2) (2022-06-25)
 
 ### Fix
