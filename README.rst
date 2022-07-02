@@ -37,7 +37,7 @@ More installing detail see `Installation docs <https://sns-sdks.lkhardy.cn/pytho
 Using
 =====
 
-You can see more usage detail at `docs <https://sns-sdks.lkhardy.cn/python-tiktok/usage/preparation/>`_
+You can see more usage detail at `usage docs <https://sns-sdks.lkhardy.cn/python-tiktok/usage/preparation/>`_
 
 ----------------
 Business Account
@@ -50,7 +50,7 @@ If you have account access token, you can initialize api instance by it.
     >>> from pytiktok import BusinessAccountApi
     >>> business_api = BusinessAccountApi(access_token="Your Access Token")
 
-Or you can let account to give permission by `OAuth flow`. See `docs <https://sns-sdks.lkhardy.cn/python-tiktok/authorization/business-authorization/>`_
+Or you can let account to give permission by `OAuth flow`. See `business authorization docs <https://sns-sdks.lkhardy.cn/python-tiktok/authorization/business-authorization/>`_
 
 Now you can get account's data.
 
@@ -81,7 +81,7 @@ If you have user access token, you can initialize api instance by it.
     >>> from pytiktok import KitApi
     >>> kit_api = KitApi(access_token="Your Access Token")
 
-Or you can let user to give permission by `OAuth flow`. See `docs <https://sns-sdks.lkhardy.cn/python-tiktok/authorization/kit-authorization/>`_
+Or you can let user to give permission by `OAuth flow`. See `kit authorization docs <https://sns-sdks.lkhardy.cn/python-tiktok/authorization/kit-authorization/>`_
 
 Now you can get account's data.
 
