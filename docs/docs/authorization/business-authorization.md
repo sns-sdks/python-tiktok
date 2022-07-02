@@ -1,4 +1,4 @@
-## Authorization for Business
+# Authorization for Business
 
 Before you use the Business Account API, you(the developer) need to first get authorization from the business to manage their accounts.
 
