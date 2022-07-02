@@ -133,7 +133,8 @@ class KitVideosResponse(BaseModel):
 class KitShareVideoData(BaseModel):
     share_id: Optional[str] = field(default=None)
     error_code: Optional[int] = field(default=None)
-    error_msg: Optional[KitVideosData] = field(default=None)
+    error_msg: Optional[KitVideosData] = field(default=None, repr=False)
+    err_code: Optional[int] = field(default=None, repr=False)
 
 
 @dataclass

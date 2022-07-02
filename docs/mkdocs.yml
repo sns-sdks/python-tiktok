@@ -31,10 +31,18 @@ nav:
   - Introduction: index.md
   - Installation: installation.md
   - Authorization:
-      - Kit: kit-authorization.md
-      - Business: business-authorization.md
+      - Business: authorization/business-authorization.md
+      - Kit: authorization/kit-authorization.md
   - Usage:
       - Preparation: usage/preparation.md
+      - Business:
+          - Account: usage/business_account/account.md
+          - Video: usage/business_account/video.md
+          - Comment: usage/business_account/comment.md
+      - Kit:
+          - User: usage/kit/user.md
+          - Video: usage/kit/video.md
+          - Login By Qrcode: usage/kit/qrcode.md
   - Changelog: CHANGELOG.md
 
 extra:

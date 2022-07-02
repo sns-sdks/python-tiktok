@@ -90,15 +90,17 @@ class KitApi:
             raise PyTiktokError("Need app client id and client secret")
 
         resp = self._request(
-            path="oauth/access_token/",
+            # To keep code not be encoding, set it in url.
+            path=f"oauth/access_token/?code={code}",
             params={
                 "client_key": self.client_id,
                 "client_secret": self.client_secret,
                 "grant_type": "authorization_code",
-                "code": code,
             },
+            enforce_auth=False,
         )
         data = self.parse_response(resp)
+        self.access_token = data.get("data", {}).get("access_token")
         return (
             data if return_json else mds.KitAccessTokenResponse.new_from_json_dict(data)
         )
@@ -122,8 +124,10 @@ class KitApi:
                 "grant_type": "refresh_token",
                 "refresh_token": refresh_token,
             },
+            enforce_auth=False,
         )
         data = self.parse_response(resp)
+        self.access_token = data.get("data", {}).get("access_token")
         return (
             data if return_json else mds.KitAccessTokenResponse.new_from_json_dict(data)
         )
@@ -145,6 +149,7 @@ class KitApi:
                 "open_id": open_id,
                 "access_token": access_token,
             },
+            enforce_auth=False,
         )
         data = self.parse_response(resp)
         return (
@@ -179,7 +184,9 @@ class KitApi:
             "next": redirect_uri,
             "state": state,
         }
-        resp = self._request(path="v0/oauth/get_qrcode", params=params)
+        resp = self._request(
+            path="v0/oauth/get_qrcode", params=params, enforce_auth=False
+        )
         data = self.parse_response(resp)
         return data if return_json else mds.KitQrCodeResponse.new_from_json_dict(data)
 
@@ -212,7 +219,9 @@ class KitApi:
             "next": redirect_uri,
             "token": token,
         }
-        resp = self._request(path="v0/oauth/check_qrcode", params=params)
+        resp = self._request(
+            path="v0/oauth/check_qrcode", params=params, enforce_auth=False
+        )
         data = self.parse_response(resp)
         return data if return_json else mds.KitQrCodeResponse.new_from_json_dict(data)
 
@@ -268,8 +277,8 @@ class KitApi:
         try:
             data = response.json()
         except ValueError:
-            raise PyTiktokError(f"Unknown error: {response.content}")
-        if "error" in data:
+            raise PyTiktokError(f"Unknown error: {response.text}")
+        if "error" in data and data["error"].get("code") != 0:
             raise PyTiktokError(data["error"])
         return data
 
@@ -288,7 +297,7 @@ class KitApi:
         :return: User data.
         """
         if fields is None:
-            fields = ["open_id", "avatar"]
+            fields = ["open_id", "union_id", "display_name", "avatar_url"]
         resp = self._request(
             path="user/info/",
             json={
@@ -336,7 +345,7 @@ class KitApi:
     def query_videos(
         self,
         open_id: str,
-        filter: dict,
+        filters: dict,
         fields: Optional[List[str]] = None,
         return_json: bool = False,
     ) -> Union[mds.KitVideosResponse, dict]:
@@ -344,7 +353,7 @@ class KitApi:
         Query video data by video ids.
 
         :param open_id: The TikTok user's unique identifier.
-        :param filter: Fields: video_ids: set<string>, max 20 video ids at a time.
+        :param filters: Fields: video_ids: set<string>, max 20 video ids at a time.
             Example: {"video_ids": ["6963640889373723909"]}
         :param fields: The set of optional video metadata.
         :param return_json: Type for returned data. If you set True JSON data will be returned.
@@ -352,7 +361,7 @@ class KitApi:
         """
         if fields is None:
             fields = ["id", "create_time", "duration", "share_url"]
-        data = {"open_id": open_id, "fields": fields, "filter": filter}
+        data = {"open_id": open_id, "fields": fields, "filters": filters}
         resp = self._request(
             path="video/query/",
             json=data,
