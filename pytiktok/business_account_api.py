@@ -67,7 +67,9 @@ class BusinessAccountApi:
             enforce_auth=False,
         )
         data = self.parse_response(response=resp)
-        self.access_token = data.get("access_token")
+        if self.api_version != API_VERSION_1_2:
+            data = data["data"]
+        self.access_token = data["access_token"]
         return data if return_json else mds.BusinessAccessToken.new_from_json_dict(data)
 
     def refresh_access_token(
@@ -99,7 +101,9 @@ class BusinessAccountApi:
             enforce_auth=False,
         )
         data = self.parse_response(response=resp)
-        self.access_token = data.get("access_token")
+        if self.api_version != API_VERSION_1_2:
+            data = data["data"]
+        self.access_token = data["access_token"]
         return data if return_json else mds.BusinessAccessToken.new_from_json_dict(data)
 
     def _request(

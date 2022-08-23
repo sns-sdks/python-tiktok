@@ -14,7 +14,7 @@ jobs:
         python-version: ['3.6', '3.7', '3.8', '3.9', '3.10']
         include:
           - python-version: 3.9
-            update-coverage: true
+            update-coverage: false
 
     steps:
       - uses: actions/checkout@v2
