@@ -5,10 +5,13 @@
 from typing import Optional, Union
 
 import requests
-from requests import Response
+from requests import Response, JSONDecodeError
 
 import pytiktok.models as mds
 from pytiktok.error import PyTiktokError
+
+
+API_VERSION_1_2 = "v1.2"  # for breaking routers
 
 
 class BusinessAccountApi:
@@ -22,7 +25,7 @@ class BusinessAccountApi:
         timeout: Optional[int] = None,
         proxies: Optional[dict] = None,
         base_url: Optional[str] = None,
-        api_version: Optional[str] = "v1.2",
+        api_version: Optional[str] = "v1.3",
     ) -> None:
         self.app_id = app_id
         self.app_secret = app_secret
@@ -46,9 +49,14 @@ class BusinessAccountApi:
         """
         if not self.app_id or not self.app_secret:
             raise PyTiktokError(f"Need app id and app secret.")
+
+        path = "oauth2/creator_token/"
+        if self.api_version == API_VERSION_1_2:
+            path = "oauth2/token/"
+
         resp = self._request(
             verb="POST",
-            path=f"{self.base_url}/oauth2/token/",
+            path=path,
             params={"business": "tt_user"},
             json={
                 "client_id": self.app_id,
@@ -73,9 +81,14 @@ class BusinessAccountApi:
         """
         if not self.app_id or not self.app_secret:
             raise PyTiktokError(f"Need app id and app secret.")
+
+        path = "oauth2/creator_token/"
+        if self.api_version == API_VERSION_1_2:
+            path = "oauth2/token/"
+
         resp = self._request(
             verb="POST",
-            path=f"{self.base_url}/oauth2/token/",
+            path=path,
             params={"business": "tt_user"},
             json={
                 "client_id": self.app_id,
@@ -134,7 +147,7 @@ class BusinessAccountApi:
     def parse_response(response: Response) -> dict:
         try:
             data = response.json()
-        except ValueError:
+        except JSONDecodeError:
             raise PyTiktokError(f"Unknown error: {response.content}")
 
         # error handler
@@ -170,7 +183,12 @@ class BusinessAccountApi:
         if fields is not None:
             data["fields"] = fields
 
-        resp = self._request(verb="POST", path="/business/get/", json=data)
+        if self.api_version == API_VERSION_1_2:
+            resp = self._request(verb="POST", path="business/get/", json=data)
+        else:
+            resp = self._request(
+                path="business/get/", params={"business_id": business_id}, json=data
+            )
         data = self.parse_response(resp)
         return (
             data
@@ -208,8 +226,14 @@ class BusinessAccountApi:
             data["cursor"] = cursor
         if max_count is not None:
             data["max_count"] = max_count
-
-        resp = self._request(verb="POST", path="business/videos/list/", json=data)
+        if self.api_version == API_VERSION_1_2:
+            resp = self._request(verb="POST", path="business/videos/list/", json=data)
+        else:
+            resp = self._request(
+                path="business/video/list/",
+                params={"business_id": business_id},
+                json=data,
+            )
         data = self.parse_response(resp)
         return (
             data if return_json else mds.BusinessVideosResponse.new_from_json_dict(data)
@@ -219,7 +243,7 @@ class BusinessAccountApi:
         self,
         business_id: str,
         video_url: str,
-        post_info: Optional[dict] = None,
+        post_info: dict,
         return_json: bool = False,
     ) -> Union[mds.BusinessVideoPublishResponse, dict]:
         """
@@ -230,16 +254,19 @@ class BusinessAccountApi:
             with a minimum recommended TTL of 30 minutes.
         :param post_info: Required field.
             Pass empty object if not using caption, disable_comment, disable_duet or disable_stitch.
-        :param return_json:
-        :return:
+        :param return_json: Type for returned data. If you set True JSON data will be returned.
+        :return: Video publish response.
         """
-        post_info = {} if post_info is None else post_info
         data = {
             "business_id": business_id,
             "video_url": video_url,
             "post_info": post_info,
         }
-        resp = self._request(verb="POST", path="business/videos/publish/", json=data)
+        path = "business/video/publish/"
+        if self.api_version == API_VERSION_1_2:
+            path = "business/videos/publish/"
+
+        resp = self._request(verb="POST", path=path, json=data)
         data = self.parse_response(resp)
         return (
             data
@@ -284,7 +311,10 @@ class BusinessAccountApi:
         if max_count is not None:
             data["max_count"] = max_count
 
-        resp = self._request(verb="POST", path="business/comments/list/", json=data)
+        verb, path = "GET", "business/comment/list/"
+        if self.api_version == API_VERSION_1_2:
+            verb, path = "POST", "business/comments/list/"
+        resp = self._request(verb=verb, path=path, json=data)
         data = self.parse_response(resp)
         return (
             data
@@ -313,7 +343,7 @@ class BusinessAccountApi:
         :param comment_id: Unique identifier for comment on an owned TikTok video to list replies on.
         :param status: Enumerated status of comment visibility. ["PUBLIC", "ALL"]
         :param sort_field: Specific field to sort comments by. ["create_time", "likes", "replies"]
-        :param sort_order: Specific field to sort comments by. ["asc", "desc"]
+        :param sort_order: Specific field to sort comments by. ["asc", "desc", "smart"]
         :param cursor: Cursor for pagination.
         :param max_count: The maximum number of comments that will be returned for each page of data. [0...30]
         :param return_json: Type for returned data. If you set True JSON data will be returned.
@@ -335,9 +365,11 @@ class BusinessAccountApi:
         if max_count is not None:
             data["max_count"] = max_count
 
-        resp = self._request(
-            verb="POST", path="business/comments/replies/list/", json=data
-        )
+        verb, path = "GET", "business/comment/reply/list/"
+        if self.api_version == API_VERSION_1_2:
+            verb, path = "POST", "business/comments/replies/list/"
+
+        resp = self._request(verb=verb, path=path, json=data)
         data = self.parse_response(resp)
         return (
             data
@@ -356,7 +388,12 @@ class BusinessAccountApi:
         :return: Comment's data.
         """
         data = {"business_id": business_id, "video_id": video_id, "text": text}
-        resp = self._request(verb="POST", path="business/comments/create/", json=data)
+
+        path = "business/comment/create/"
+        if self.api_version == API_VERSION_1_2:
+            path = "business/comments/create/"
+
+        resp = self._request(verb="POST", path=path, json=data)
         data = self.parse_response(resp)
         return (
             data
@@ -386,9 +423,11 @@ class BusinessAccountApi:
             "comment_id": comment_id,
             "text": text,
         }
-        resp = self._request(
-            verb="POST", path="business/comments/replies/create/", json=data
-        )
+        path = "business/comment/reply/create/"
+        if self.api_version == API_VERSION_1_2:
+            path = "business/comments/replies/create/"
+
+        resp = self._request(verb="POST", path=path, json=data)
         data = self.parse_response(resp)
         return (
             data
@@ -413,7 +452,10 @@ class BusinessAccountApi:
         :return: Comment like status response.
         """
         data = {"business_id": business_id, "comment_id": comment_id, "action": action}
-        resp = self._request(verb="POST", path="business/comments/like/", json=data)
+        path = "business/comment/like/"
+        if self.api_version == API_VERSION_1_2:
+            path = "business/comments/like/"
+        resp = self._request(verb="POST", path=path, json=data)
         data = self.parse_response(resp)
         return (
             data if return_json else mds.BusinessBaseResponse.new_from_json_dict(data)
@@ -443,7 +485,10 @@ class BusinessAccountApi:
             "comment_id": comment_id,
             "action": action,
         }
-        resp = self._request(verb="POST", path="business/comments/pin/", json=data)
+        path = "business/comment/pin/"
+        if self.api_version == API_VERSION_1_2:
+            path = "business/comments/pin/"
+        resp = self._request(verb="POST", path=path, json=data)
         data = self.parse_response(resp)
         return (
             data if return_json else mds.BusinessBaseResponse.new_from_json_dict(data)
@@ -473,7 +518,10 @@ class BusinessAccountApi:
             "comment_id": comment_id,
             "action": action,
         }
-        resp = self._request(verb="POST", path="business/comments/hide/", json=data)
+        path = "business/comment/hide/"
+        if self.api_version == API_VERSION_1_2:
+            path = "business/comments/hide/"
+        resp = self._request(verb="POST", path=path, json=data)
         data = self.parse_response(resp)
         return (
             data if return_json else mds.BusinessBaseResponse.new_from_json_dict(data)
@@ -491,7 +539,10 @@ class BusinessAccountApi:
         :return: Comment delete status response.
         """
         data = {"business_id": business_id, "comment_id": comment_id}
-        resp = self._request(verb="POST", path="business/comments/delete/", json=data)
+        path = "business/comment/delete/"
+        if self.api_version == API_VERSION_1_2:
+            path = "business/comments/delete/"
+        resp = self._request(verb="POST", path=path, json=data)
         data = self.parse_response(resp)
         return (
             data if return_json else mds.BusinessBaseResponse.new_from_json_dict(data)
