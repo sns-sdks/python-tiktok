@@ -43,7 +43,7 @@ You can see more usage detail at `usage docs <https://sns-sdks.lkhardy.cn/python
 Business Account
 ----------------
 
-.. tip::
+Version Tips :
 
     API for Business Version ``1.3`` is now live! visit `here <https://ads.tiktok.com/marketing_api/docs?id=1740579480076290>`_ for more details.
 
