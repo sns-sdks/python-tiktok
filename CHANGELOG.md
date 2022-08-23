@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.1.4](https://github.com/sns-sdks/python-tiktok/v0.1.4) (2022-08-23)
+
+### Features
+
+- Add api version v1.3 support.
+
 ## [0.1.3](https://github.com/sns-sdks/python-tiktok/v0.1.3) (2022-07-02)
 
 ### Fix
