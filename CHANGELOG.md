@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.1.5](https://github.com/sns-sdks/python-tiktok/v0.1.5) (2022-08-24)
+
+### Fix
+
+- fix sometimes the `requests` module raise the `JSONDecodeError not found`. 
+
 ## [0.1.4](https://github.com/sns-sdks/python-tiktok/v0.1.4) (2022-08-23)
 
 ### Features
