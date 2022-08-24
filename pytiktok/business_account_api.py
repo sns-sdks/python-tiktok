@@ -5,7 +5,7 @@
 from typing import Optional, Union
 
 import requests
-from requests import Response, JSONDecodeError
+from requests import Response
 
 import pytiktok.models as mds
 from pytiktok.error import PyTiktokError
@@ -151,7 +151,7 @@ class BusinessAccountApi:
     def parse_response(response: Response) -> dict:
         try:
             data = response.json()
-        except JSONDecodeError:
+        except ValueError:
             raise PyTiktokError(f"Unknown error: {response.content}")
 
         # error handler
