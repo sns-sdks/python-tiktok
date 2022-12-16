@@ -189,3 +189,23 @@ class BusinessCommentResponse(BusinessBaseResponse):
 @dataclass
 class BusinessCommentsResponse(BusinessBaseResponse):
     data: Optional[BusinessCommentsData] = field(default=None)
+
+
+@dataclass
+class BusinessHashtagSuggestion(BaseModel):
+    name: Optional[str] = field(default=None)
+    view_count: Optional[int] = field(default=None)
+
+
+@dataclass
+class BusinessHashtagSuggestionsData(BaseModel):
+    suggestions: Optional[List[BusinessHashtagSuggestion]] = field(default=None)
+
+
+@dataclass
+class BusinessHashtagSuggestionResponse(BusinessBaseResponse):
+    """
+    Refer: https://ads.tiktok.com/marketing_api/docs?id=1749827124568130
+    """
+
+    data: Optional[BusinessHashtagSuggestionsData] = field(default=None)

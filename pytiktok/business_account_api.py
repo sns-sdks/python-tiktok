@@ -551,3 +551,33 @@ class BusinessAccountApi:
         return (
             data if return_json else mds.BusinessBaseResponse.new_from_json_dict(data)
         )
+
+    def get_hashtag_suggestions(
+        self,
+        business_id: str,
+        keyword: str,
+        language: str = "en",
+        return_json: bool = False,
+    ) -> Union[dict, mds.BusinessHashtagSuggestionResponse]:
+        """Specify a keyword and get a list of recommended hashtags to be used for your Business Account videos.
+
+        :param business_id: Application specific unique identifier for the TikTok account.
+        :param keyword: The keyword that you want to get recommended hashtags for.
+        :param language: Keyword language.
+        :param return_json: Type for returned data. If you set True JSON data will be returned.
+        :return: Suggestion hashtags.
+        """
+        if self.api_version == API_VERSION_1_2:
+            raise PyTiktokError("Version 1.2 not support this method.")
+        data = {
+            "business_id": business_id,
+            "keyword": keyword,
+            "language": language,
+        }
+        resp = self._request(verb="GET", path="business/hashtag/suggestion/", json=data)
+        data = self.parse_response(resp)
+        return (
+            data
+            if return_json
+            else mds.BusinessHashtagSuggestionResponse.new_from_json_dict(data)
+        )
