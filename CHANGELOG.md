@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.1.6](https://github.com/sns-sdks/python-tiktok/v0.1.6) (2022-12-26)
+
+### Features
+
+- Add api for get hashtag suggestions.
+
 ## [0.1.5](https://github.com/sns-sdks/python-tiktok/v0.1.5) (2022-08-24)
 
 ### Fix
