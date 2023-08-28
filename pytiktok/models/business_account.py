@@ -18,16 +18,32 @@ class BusinessBaseResponse(BaseModel):
 @dataclass
 class BusinessAccessToken(BaseModel):
     """
-    Refer: https://ads.tiktok.com/marketing_api/docs?id=1733224966619138
+    Refer:
+        v1.2: https://ads.tiktok.com/marketing_api/docs?id=1733224966619138
+        v1.3: https://business-api.tiktok.com/portal/docs?id=1738084387220481
     """
 
     access_token: Optional[str] = field(default=None)
     token_type: Optional[str] = field(default=None)
     scope: Optional[str] = field(default=None, repr=False)
     expires: Optional[int] = field(default=None, repr=False)
+    expires_in: Optional[int] = field(default=None, repr=False)
     refresh_token: Optional[str] = field(default=None, repr=False)
     refresh_expires: Optional[int] = field(default=None, repr=False)
+    refresh_token_expires_in: Optional[int] = field(default=None, repr=False)
     creator_id: Optional[str] = field(default=None, repr=False)
+    open_id: Optional[str] = field(default=None, repr=False)
+
+
+@dataclass
+class BusinessAccessTokenInfo(BaseModel):
+    """
+    Refer: https://business-api.tiktok.com/portal/docs?id=1765927978092545
+    """
+
+    app_id: Optional[str] = field(default=None)
+    creator_id: Optional[str] = field(default=None)
+    scope: Optional[str] = field(default=None)
 
 
 @dataclass

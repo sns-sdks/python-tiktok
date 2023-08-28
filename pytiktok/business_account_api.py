@@ -9,6 +9,7 @@ from requests import Response
 
 import pytiktok.models as mds
 from pytiktok.error import PyTiktokError
+from pytiktok.decorators import function_only_for_api_v13
 
 
 API_VERSION_1_2 = "v1.2"  # for breaking routers
@@ -26,6 +27,7 @@ class BusinessAccountApi:
         proxies: Optional[dict] = None,
         base_url: Optional[str] = None,
         api_version: Optional[str] = "v1.3",
+        oauth_redirect_uri: Optional[str] = None,
     ) -> None:
         self.app_id = app_id
         self.app_secret = app_secret
@@ -37,6 +39,10 @@ class BusinessAccountApi:
 
         # base url prefix
         self.base_url = base_url or self.BASE_URL
+
+        # oauth redirect uri
+        # Must be the same as the TikTok account holder redirect URL set in the app.
+        self.oauth_redirect_uri = oauth_redirect_uri
 
     def generate_access_token(
         self, code: str, return_json: bool = False
@@ -51,8 +57,6 @@ class BusinessAccountApi:
             raise PyTiktokError(f"Need app id and app secret.")
 
         path = "oauth2/creator_token/"
-        if self.api_version == API_VERSION_1_2:
-            path = "oauth2/token/"
 
         resp = self._request(
             verb="POST",
@@ -106,6 +110,103 @@ class BusinessAccountApi:
         self.access_token = data["access_token"]
         return data if return_json else mds.BusinessAccessToken.new_from_json_dict(data)
 
+    @function_only_for_api_v13
+    def generate_access_token_v2(
+        self, code: str, redirect_uri: Optional[str] = None, return_json: bool = False
+    ) -> Union[mds.BusinessAccessToken, dict]:
+        """
+        Generate access token by the auth code.
+        :param code: The authorization code you get from the creator
+        :param redirect_uri: The redirect URL which the client will be directed to.
+            Its value must be the same as the TikTok account holder redirect URL set in the app.
+        :param return_json: Type for returned data. If you set True JSON data will be returned.
+        :return: Access Token
+        """
+        redirect_uri = redirect_uri or self.oauth_redirect_uri
+
+        if not self.app_id or not self.app_secret or not redirect_uri:
+            raise PyTiktokError(f"Need app id, app secret and redirect_uri.")
+
+        resp = self._request(
+            verb="POST",
+            path="tt_user/oauth2/token/",
+            json={
+                "client_id": self.app_id,
+                "client_secret": self.app_secret,
+                "grant_type": "authorization_code",
+                "auth_code": code,
+                "redirect_uri": redirect_uri,
+            },
+            enforce_auth=False,
+        )
+
+        data = self.parse_response(response=resp)
+        data = data["data"]
+        self.access_token = data["access_token"]
+        return data if return_json else mds.BusinessAccessToken.new_from_json_dict(data)
+
+    @function_only_for_api_v13
+    def refresh_access_token_v2(
+        self, refresh_token: str, return_json: bool = False
+    ) -> Union[mds.BusinessAccessToken, dict]:
+        """
+        Use this endpoint to renew an access token by refresh_token.
+        :param refresh_token: Refresh token,
+        :param return_json: Type for returned data. If you set True JSON data will be returned.
+        :return: Access Token
+        """
+        if not self.app_id or not self.app_secret:
+            raise PyTiktokError(f"Need app id and app secret.")
+        resp = self._request(
+            verb="POST",
+            path="tt_user/oauth2/refresh_token/",
+            json={
+                "client_id": self.app_id,
+                "client_secret": self.app_secret,
+                "grant_type": "refresh_token",
+                "refresh_token": refresh_token,
+            },
+            enforce_auth=False,
+        )
+
+        data = self.parse_response(response=resp)
+        data = data["data"]
+        self.access_token = data["access_token"]
+        return data if return_json else mds.BusinessAccessToken.new_from_json_dict(data)
+
+    @function_only_for_api_v13
+    def get_token_info(
+        self, access_token: str, app_id: Optional[str] = None, return_json: bool = False
+    ) -> Union[mds.BusinessAccessTokenInfo, dict]:
+        """
+        Get the permission scopes of a TikTok Business Account or a TikTok Personal Account that are authorized by the TikTok account user.
+        :param access_token: Access token authorized by TikTok Creator Marketplace accounts.
+        :param app_id: ID of your developer application.
+        :param return_json: Type for returned data. If you set True JSON data will be returned.
+        :return: Access token info.
+        """
+        app_id = app_id or self.app_id
+        if not app_id:
+            raise PyTiktokError(f"Need app id.")
+
+        resp = self._request(
+            verb="POST",
+            path="tt_user/token_info/get/",
+            json={
+                "app_id": app_id,
+                "access_token": access_token,
+            },
+            enforce_auth=False,
+        )
+
+        data = self.parse_response(response=resp)
+        data = data["data"]
+        return (
+            data
+            if return_json
+            else mds.BusinessAccessTokenInfo.new_from_json_dict(data)
+        )
+
     def _request(
         self,
         path: str,
@@ -151,6 +252,7 @@ class BusinessAccountApi:
     def parse_response(response: Response) -> dict:
         try:
             data = response.json()
+            response.close()
         except ValueError:
             raise PyTiktokError(f"Unknown error: {response.content}")
 
