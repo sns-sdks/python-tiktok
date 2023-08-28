@@ -40,6 +40,7 @@ class BusinessAccessTokenInfo(BaseModel):
     """
     Refer: https://business-api.tiktok.com/portal/docs?id=1765927978092545
     """
+
     app_id: Optional[str] = field(default=None)
     creator_id: Optional[str] = field(default=None)
     scope: Optional[str] = field(default=None)

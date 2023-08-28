@@ -176,8 +176,7 @@ class BusinessAccountApi:
 
     @function_only_for_api_v13
     def get_token_info(
-        self, access_token: str, app_id: Optional[str] = None,
-        return_json: bool = False
+        self, access_token: str, app_id: Optional[str] = None, return_json: bool = False
     ) -> Union[mds.BusinessAccessTokenInfo, dict]:
         """
         Get the permission scopes of a TikTok Business Account or a TikTok Personal Account that are authorized by the TikTok account user.
@@ -202,7 +201,11 @@ class BusinessAccountApi:
 
         data = self.parse_response(response=resp)
         data = data["data"]
-        return data if return_json else mds.BusinessAccessTokenInfo.new_from_json_dict(data)
+        return (
+            data
+            if return_json
+            else mds.BusinessAccessTokenInfo.new_from_json_dict(data)
+        )
 
     def _request(
         self,
