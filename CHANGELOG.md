@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.1.7](https://github.com/sns-sdks/python-tiktok/v0.1.7) (2023-08-28)
+
+### Features
+
+- Add api for Authentication 2.0
+- Add recent update for api, new fields and new parameters.
+
 ## [0.1.6](https://github.com/sns-sdks/python-tiktok/v0.1.6) (2022-12-26)
 
 ### Features
