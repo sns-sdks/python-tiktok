@@ -2,7 +2,7 @@
     Core API impl.
 """
 
-from typing import Optional, Union
+from typing import Optional, List, Union
 
 import requests
 from requests import Response
@@ -384,6 +384,8 @@ class BusinessAccountApi:
         self,
         business_id: str,
         video_id: str,
+        comment_ids: Optional[List[str]] = None,
+        include_replies: Optional[bool] = None,
         status: Optional[str] = None,
         sort_field: Optional[str] = None,
         sort_order: Optional[str] = None,
@@ -397,6 +399,9 @@ class BusinessAccountApi:
 
         :param business_id: Application specific unique identifier for the TikTok account.
         :param video_id: Unique identifier for owned TikTok video to list comments on.
+        :param comment_ids: A list of IDs for comments or comment replies that you want to filter the results by.
+            Max size: 30.
+        :param include_replies: Whether to include replies to the top-level comments in the results. Max size 3.
         :param status: Enumerated status of comment visibility. ["PUBLIC", "ALL"]
         :param sort_field: Specific field to sort comments by. ["create_time", "likes", "replies"]
         :param sort_order: Specific field to sort comments by. ["asc", "desc"]
@@ -406,6 +411,10 @@ class BusinessAccountApi:
         :return: Video's comments data.
         """
         data = {"business_id": business_id, "video_id": video_id}
+        if comment_ids is not None:
+            data["comment_ids"] = comment_ids
+        if include_replies is not None:
+            data["include_replies"] = include_replies
         if status is not None:
             data["status"] = status
         if sort_field is not None:
