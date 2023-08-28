@@ -189,6 +189,8 @@ class BusinessComment(BaseModel):
     status: Optional[str] = field(default=None, repr=False)
     username: Optional[str] = field(default=None, repr=False)
     profile_image: Optional[str] = field(default=None, repr=False)
+    parent_comment_id: Optional[str] = field(default=None)
+    reply_list: Optional[List["BusinessComment"]] = field(default=None, repr=False)
 
 
 @dataclass
