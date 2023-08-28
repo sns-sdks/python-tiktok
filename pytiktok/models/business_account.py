@@ -81,9 +81,10 @@ class BusinessAccountMetric(BaseModel):
 @dataclass
 class BusinessAccount(BaseModel):
     """
-    Refer: https://ads.tiktok.com/marketing_api/docs?id=1733326495444994
+    Refer: https://business-api.tiktok.com/portal/docs?id=1762228399168514
     """
 
+    is_business_account: Optional[bool] = field(default=None)
     username: Optional[str] = field(default=None)
     display_name: Optional[str] = field(default=None)
     profile_image: Optional[str] = field(default=None)
