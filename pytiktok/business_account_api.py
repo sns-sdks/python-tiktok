@@ -429,7 +429,7 @@ class BusinessAccountApi:
         verb, path = "GET", "business/comment/list/"
         if self.api_version == API_VERSION_1_2:
             verb, path = "POST", "business/comments/list/"
-        resp = self._request(verb=verb, path=path, json=data)
+        resp = self._request(verb=verb, path=path, json=data, params=data)
         data = self.parse_response(resp)
         return (
             data
@@ -484,7 +484,7 @@ class BusinessAccountApi:
         if self.api_version == API_VERSION_1_2:
             verb, path = "POST", "business/comments/replies/list/"
 
-        resp = self._request(verb=verb, path=path, json=data)
+        resp = self._request(verb=verb, path=path, json=data, params=data)
         data = self.parse_response(resp)
         return (
             data
@@ -685,7 +685,7 @@ class BusinessAccountApi:
             "keyword": keyword,
             "language": language,
         }
-        resp = self._request(verb="GET", path="business/hashtag/suggestion/", json=data)
+        resp = self._request(verb="GET", path="business/hashtag/suggestion/", params=data)
         data = self.parse_response(resp)
         return (
             data
