@@ -1,4 +1,4 @@
-__version__ = "0.1.7"
+__version__ = "0.1.8"
 
 from pytiktok.business_account_api import BusinessAccountApi
 from pytiktok.kit_api import KitApi

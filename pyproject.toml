@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "python-tiktok"
-version = "0.1.7"
+version = "0.1.8"
 description = "A simple Python wrapper for Tiktok API. ✨ 🍰 ✨"
 authors = ["ikaroskun <merle.liukun@gmail.com>"]
 license = "MIT"
