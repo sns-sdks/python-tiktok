@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.1.8](https://github.com/sns-sdks/python-tiktok/v0.1.8) (2024-02-22)
+
+### Fix
+
+- make parameters well
+
 ## [0.1.7](https://github.com/sns-sdks/python-tiktok/v0.1.7) (2023-08-28)
 
 ### Features
