@@ -1,6 +1,7 @@
 """
     Api impl for tiktok developer
 """
+
 import random
 import string
 from typing import Optional, List, Tuple, Union, IO

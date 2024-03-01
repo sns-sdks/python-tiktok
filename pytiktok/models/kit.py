@@ -1,6 +1,7 @@
 """
     Models for TikTok kit api.
 """
+
 from dataclasses import dataclass, field
 from typing import Optional, List
 

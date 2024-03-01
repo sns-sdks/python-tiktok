@@ -392,7 +392,9 @@ class BusinessAccountApi:
         if max_count is not None:
             params["max_count"] = max_count
 
-        resp = self._request(verb="GET", path="business/comment/reply/list/", params=params)
+        resp = self._request(
+            verb="GET", path="business/comment/reply/list/", params=params
+        )
         data = self.parse_response(resp)
         return (
             data
@@ -443,7 +445,9 @@ class BusinessAccountApi:
             "text": text,
         }
 
-        resp = self._request(verb="POST", path="business/comment/reply/create/", json=data)
+        resp = self._request(
+            verb="POST", path="business/comment/reply/create/", json=data
+        )
         data = self.parse_response(resp)
         return (
             data
@@ -572,7 +576,9 @@ class BusinessAccountApi:
             "keyword": keyword,
             "language": language,
         }
-        resp = self._request(verb="GET", path="business/hashtag/suggestion/", params=data)
+        resp = self._request(
+            verb="GET", path="business/hashtag/suggestion/", params=data
+        )
         data = self.parse_response(resp)
         return (
             data
