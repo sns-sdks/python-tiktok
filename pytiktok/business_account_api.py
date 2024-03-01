@@ -102,6 +102,27 @@ class BusinessAccountApi:
         self.access_token = data["access_token"]
         return data if return_json else mds.BusinessAccessToken.new_from_json_dict(data)
 
+    def revoke_access_token(self, access_token: str, return_json: bool = False) -> dict:
+        if not self.app_id or not self.app_secret:
+            raise PyTiktokError(f"Need app id and app secret.")
+        resp = self._request(
+            verb="POST",
+            path="tt_user/oauth2/revoke/",
+            json={
+                "client_id": self.app_id,
+                "client_secret": self.app_secret,
+                "access_token": access_token,
+            },
+            enforce_auth=False,
+        )
+
+        data = self.parse_response(response=resp)
+        return (
+            data
+            if return_json
+            else mds.BusinessAccessTokenRevokeResponse.new_from_json_dict(data)
+        )
+
     def get_token_info(
         self, access_token: str, app_id: Optional[str] = None, return_json: bool = False
     ) -> Union[mds.BusinessAccessTokenInfo, dict]:
