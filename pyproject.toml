@@ -25,7 +25,7 @@ python = "^3.6.2"
 requests = "^2.24"
 dataclasses-json = "^0.5.7"
 
-[tool.poetry.group.dev.dependencies]
+[tool.poetry.dev-dependencies]
 pytest = "^6.2.5"
 
 [build-system]
