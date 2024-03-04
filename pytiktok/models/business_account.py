@@ -46,6 +46,14 @@ class BusinessAccessTokenInfo(BaseModel):
     scope: Optional[str] = field(default=None)
 
 
+class BusinessAccessTokenRevokeResponse(BusinessBaseResponse):
+    """
+    Refer: https://business-api.tiktok.com/portal/docs?id=1738084387220481
+    """
+
+    ...
+
+
 @dataclass
 class BusinessAccountAudienceCountry(BaseModel):
     country: Optional[str] = field(default=None)

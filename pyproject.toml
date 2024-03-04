@@ -27,6 +27,9 @@ dataclasses-json = "^0.5.7"
 
 [tool.poetry.dev-dependencies]
 pytest = "^6.2.5"
+pytest-cov = "^4.0.0"
+responses = "^0.17.0"
+
 
 [build-system]
 requires = ["poetry-core"]
