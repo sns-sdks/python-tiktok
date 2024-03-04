@@ -23,4 +23,5 @@ def bus_api():
         app_id="test_app_id",
         app_secret="test_app_secret",
         access_token="test_access_token",
+        oauth_redirect_uri="https://example.com",
     )
