@@ -23,7 +23,7 @@ packages = [
 [tool.poetry.dependencies]
 python = "^3.6.2"
 requests = "^2.24"
-dataclasses-json = "^0.5.7"
+dataclasses-json = "^0.6.0"
 
 [tool.poetry.dev-dependencies]
 pytest = "^6.2.5"
