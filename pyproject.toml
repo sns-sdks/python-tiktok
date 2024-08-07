@@ -9,10 +9,12 @@ repository = "https://github.com/sns-sdks/python-tiktok"
 keywords = ["tiktok", "tiktok sdk", "tiktok api"]
 classifiers = [
     "Programming Language :: Python :: Implementation :: CPython",
-    "Programming Language :: Python :: 3.6",
     "Programming Language :: Python :: 3.7",
     "Programming Language :: Python :: 3.8",
     "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
     "Topic :: Software Development :: Libraries :: Python Modules",
     "Intended Audience :: Developers",
 ]
@@ -21,9 +23,9 @@ packages = [
 ]
 
 [tool.poetry.dependencies]
-python = "^3.6.2"
+python = "^3.7"
 requests = "^2.24"
-dataclasses-json = "^0.5.7"
+dataclasses-json = "^0.6.0"
 
 [tool.poetry.dev-dependencies]
 pytest = "^6.2.5"
