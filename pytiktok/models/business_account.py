@@ -165,7 +165,7 @@ class BusinessVideosResponse(BusinessBaseResponse):
 
 
 @dataclass
-class BusinessVideoPublish(BusinessBaseResponse):
+class BusinessVideoPublish(BaseModel):
     """
     Refer: https://ads.tiktok.com/marketing_api/docs?id=1733584024973313
     """
@@ -179,13 +179,30 @@ class BusinessVideoPublishResponse(BusinessBaseResponse):
 
 
 @dataclass
+class BusinessPhotoPublish(BusinessVideoPublish):
+    """
+    https://business-api.tiktok.com/portal/docs?id=1803630424390658
+    """
+
+    ...
+
+
+@dataclass
+class BusinessPhotoPublishResponse(BusinessBaseResponse):
+    data: Optional[BusinessPhotoPublish] = field(default=None)
+
+
+@dataclass
 class BusinessComment(BaseModel):
     """
     Refer: https://ads.tiktok.com/marketing_api/docs?id=1733329505077250
     """
 
     comment_id: Optional[str] = field(default=None)
+    unique_identifier: Optional[str] = field(default=None, repr=True)
     video_id: Optional[str] = field(default=None, repr=False)
+    # Note: user_id now is To-be-deprecated, will be deprecated in the next API version.
+    # Please use unique_identifier instead.
     user_id: Optional[str] = field(default=None, repr=False)
     create_time: Optional[int] = field(default=None)
     text: Optional[str] = field(default=None)
