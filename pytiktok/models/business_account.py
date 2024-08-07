@@ -199,7 +199,7 @@ class BusinessComment(BaseModel):
     """
 
     comment_id: Optional[str] = field(default=None)
-    unique_identifier: Optional[str] = field(default=None, repr=True)
+    unique_identifier: Optional[str] = field(default=None)
     video_id: Optional[str] = field(default=None, repr=False)
     # Note: user_id now is To-be-deprecated, will be deprecated in the next API version.
     # Please use unique_identifier instead.
@@ -253,3 +253,38 @@ class BusinessHashtagSuggestionResponse(BusinessBaseResponse):
     """
 
     data: Optional[BusinessHashtagSuggestionsData] = field(default=None)
+
+
+@dataclass
+class BusinessUrlPropertyInfo(BaseModel):
+    """
+    Refer: https://business-api.tiktok.com/portal/docs?id=1769325280876545
+    """
+
+    property_type: Optional[int] = field(default=None)
+    url: Optional[str] = field(default=None)
+    property_status: Optional[int] = field(default=None, repr=False)
+    signature: Optional[str] = field(default=None, repr=False)
+    file_name: Optional[str] = field(default=None, repr=False)
+
+
+@dataclass
+class BusinessUrlPropertyInfoData(BaseModel):
+    url_property_info: Optional[BusinessUrlPropertyInfo] = field(default=None)
+
+
+@dataclass
+class BusinessUrlPropertyInfoResponse(BusinessBaseResponse):
+    data: Optional[BusinessUrlPropertyInfoData] = field(default=None)
+
+
+@dataclass
+class BusinessUrlPropertyInfoListData(BaseModel):
+    url_property_info_list: Optional[List[BusinessUrlPropertyInfo]] = field(
+        default=None
+    )
+
+
+@dataclass
+class BusinessUrlPropertyInfoListResponse(BusinessBaseResponse):
+    data: Optional[BusinessUrlPropertyInfoListData] = field(default=None)

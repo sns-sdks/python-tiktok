@@ -641,3 +641,126 @@ class BusinessAccountApi:
             if return_json
             else mds.BusinessHashtagSuggestionResponse.new_from_json_dict(data)
         )
+
+    def add_url_property(
+        self,
+        app_id: str,
+        property_type: int,
+        url: str,
+        return_json: bool = False,
+    ) -> Union[mds.BusinessUrlPropertyInfoResponse, dict]:
+        """
+        Add a URL property (domain or URL prefix) that you want to verify ownership of, to an advertiser account.
+        :param app_id: ID of your developer application.
+        :param property_type: Type of the URL property.
+            - 1: Domain
+            - 2: URL prefix
+        :param url: An owned URL that you want to add.
+            - If property_type is 1, specify a base domain or subdomain. ex: example.com.
+            - If property_type is 2, specify a URL prefix which consists of:
+                https:// + host (must be a domain) + path + /. ex: https://example.com/folder/.
+        :param return_json: Type for returned data. If you set True JSON data will be returned.
+        :return: URL property info.
+        """
+        data = {
+            "app_id": app_id,
+            "url_property_meta": {
+                "property_type": property_type,
+                "url": url,
+            },
+        }
+        resp = self._request(verb="POST", path="business/property/add/", json=data)
+        data = self.parse_response(resp)
+        return (
+            data
+            if return_json
+            else mds.BusinessUrlPropertyInfoResponse.new_from_json_dict(data)
+        )
+
+    def check_url_property_verification(
+        self,
+        app_id: str,
+        property_type: int,
+        url: str,
+        return_json: bool = False,
+    ) -> Union[mds.BusinessUrlPropertyInfoResponse, dict]:
+        """
+        Check the result of the ownership verification for a URL property (domain or URL prefix).
+        :param app_id: ID of your developer application.
+        :param property_type: Type of the URL property.
+            - 1: Domain
+            - 2: URL prefix
+        :param url: An owned URL that you want to add.
+            - If property_type is 1, specify a base domain or subdomain. ex: example.com.
+            - If property_type is 2, specify a URL prefix which consists of:
+                https:// + host (must be a domain) + path + /. ex: https://example.com/folder/.
+        :param return_json: Type for returned data. If you set True JSON data will be returned.
+        :return: URL property verification info.
+        """
+        data = {
+            "app_id": app_id,
+            "url_property_meta": {
+                "property_type": property_type,
+                "url": url,
+            },
+        }
+        resp = self._request(verb="POST", path="business/property/verify/", json=data)
+        data = self.parse_response(resp)
+        return (
+            data
+            if return_json
+            else mds.BusinessUrlPropertyInfoResponse.new_from_json_dict(data)
+        )
+
+    def delete_url_property(
+        self,
+        app_id: str,
+        property_type: int,
+        url: str,
+        return_json: bool = False,
+    ) -> Union[mds.BusinessBaseResponse, dict]:
+        """
+        Check the result of the ownership verification for a URL property (domain or URL prefix).
+        :param app_id: ID of your developer application.
+        :param property_type: Type of the URL property.
+            - 1: Domain
+            - 2: URL prefix
+        :param url: An owned URL that you want to add.
+            - If property_type is 1, specify a base domain or subdomain. ex: example.com.
+            - If property_type is 2, specify a URL prefix which consists of:
+                https:// + host (must be a domain) + path + /. ex: https://example.com/folder/.
+        :param return_json: Type for returned data. If you set True JSON data will be returned.
+        :return: url property delete status response
+        """
+        data = {
+            "app_id": app_id,
+            "url_property_meta": {
+                "property_type": property_type,
+                "url": url,
+            },
+        }
+        resp = self._request(verb="POST", path="business/property/delete/", json=data)
+        data = self.parse_response(resp)
+        return (
+            data if return_json else mds.BusinessBaseResponse.new_from_json_dict(data)
+        )
+
+    def get_url_property_list(
+        self,
+        app_id: str,
+        return_json: bool = False,
+    ) -> Union[mds.BusinessUrlPropertyInfoListResponse, dict]:
+        """
+        Get the list of URL properties that have been added to an advertiser account.
+        :param app_id: ID of your developer application.
+        :param return_json: Type for returned data. If you set True JSON data will be returned.
+        :return: URL property list response
+        """
+        params = {"app_id": app_id}
+        resp = self._request(verb="GET", path="business/property/list/", params=params)
+        data = self.parse_response(resp)
+        return (
+            data
+            if return_json
+            else mds.BusinessUrlPropertyInfoListResponse.new_from_json_dict(data)
+        )
