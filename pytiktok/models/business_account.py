@@ -198,7 +198,10 @@ class BusinessComment(BaseModel):
     """
 
     comment_id: Optional[str] = field(default=None)
+    unique_identifier: Optional[str] = field(default=None, repr=True)
     video_id: Optional[str] = field(default=None, repr=False)
+    # Note: user_id now is To-be-deprecated, will be deprecated in the next API version.
+    # Please use unique_identifier instead.
     user_id: Optional[str] = field(default=None, repr=False)
     create_time: Optional[int] = field(default=None)
     text: Optional[str] = field(default=None)
