@@ -39,6 +39,27 @@ api.create_video(
 # Response: {"code":0,"message":"Ok","request_id":"20210817034316010245031056097316BA","data":{"share_id":"videopublish.8111673464968467978"}}
 ```
 
-Now your video has submitted to TikTok, Once video been processed, video publish status will send by webhook.
+### Publish photo post
 
-More see [Webhook events](https://ads.tiktok.com/marketing_api/docs?id=1733584763973634).
+Publish a photo post to an owned TikTok Account.
+
+```python
+api.create_photo(
+    business_id="business id",
+    photo_images=[
+        "https://example.com/photo1.jpg",
+        "https://example.com/photo2.jpg",
+        "https://example.com/photo3.jpg"
+    ],
+    post_info={
+        "privacy_level": "PUBLIC_TO_EVERYONE",
+        "title": "Photo post title",
+        "auto_add_music": True
+    }
+)
+# Response: {"code":0,"message":"Ok","request_id":"20210817034316010245031056097316BA","data":{"share_id":"p_pub_url~v1.2345123456789123456"}}
+```
+
+Now your video or photo post has submitted to TikTok, Once video or photo post been processed, video publish status will send by webhook.
+
+More see [Video Webhook events](https://business-api.tiktok.com/portal/docs?id=1759992576757762), [Photo Webhook events](https://business-api.tiktok.com/portal/docs?id=1803634363436034).

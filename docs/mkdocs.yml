@@ -2,7 +2,7 @@ site_name: Python Tiktok Docs
 site_description: Docs for python-tiktok library
 repo_url: https://github.com/sns-sdks/python-tiktok
 site_url: https://sns-sdks.github.io/python-tiktok/
-copyright: Copyright &copy; 2022 - 2022 Ikaros kun
+copyright: Copyright &copy; 2022 - 2024 Ikaros kun
 
 theme:
   name: material
@@ -39,6 +39,7 @@ nav:
           - Account: usage/business_account/account.md
           - Video: usage/business_account/video.md
           - Comment: usage/business_account/comment.md
+          - URL properties: usage/business_account/url_properties.md
       - Kit:
           - User: usage/kit/user.md
           - Video: usage/kit/video.md
