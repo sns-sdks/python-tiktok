@@ -183,6 +183,7 @@ class BusinessPhotoPublish(BusinessVideoPublish):
     """
     https://business-api.tiktok.com/portal/docs?id=1803630424390658
     """
+
     ...
 
 
