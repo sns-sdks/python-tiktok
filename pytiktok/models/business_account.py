@@ -165,7 +165,7 @@ class BusinessVideosResponse(BusinessBaseResponse):
 
 
 @dataclass
-class BusinessVideoPublish(BusinessBaseResponse):
+class BusinessVideoPublish(BaseModel):
     """
     Refer: https://ads.tiktok.com/marketing_api/docs?id=1733584024973313
     """
