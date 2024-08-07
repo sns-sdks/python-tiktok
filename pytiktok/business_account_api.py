@@ -316,6 +316,41 @@ class BusinessAccountApi:
             else mds.BusinessVideoPublishResponse.new_from_json_dict(data)
         )
 
+    def create_photo(
+        self,
+        business_id: str,
+        photo_images: List[str],
+        post_info: dict,
+        photo_cover_index: int = 0,
+        return_json: bool = False,
+    ) -> Union[mds.BusinessPhotoPublishResponse, dict]:
+        """
+        Publish a photo post to an owned TikTok Account.
+        :param business_id: Application specific unique identifier for the TikTok account.
+        :param photo_images: A list of up to 35 publicly accessible HTTP(s) URLs for the photo content to be published.
+        :param post_info: Information about the photo post.
+            - privacy_level is Required field.
+            - Other fields are optional
+        :param photo_cover_index: The index of the photo to be used as the cover for the post.
+            O is the first photo.
+        :param return_json: Type for returned data. If you set True JSON data will be returned.
+        :return: Photo publish response.
+        """
+
+        data = {
+            "business_id": business_id,
+            "photo_images": photo_images,
+            "photo_cover_index": photo_cover_index,
+            "post_info": post_info,
+        }
+        resp = self._request(verb="POST", path="business/photo/publish/", json=data)
+        data = self.parse_response(resp)
+        return (
+            data
+            if return_json
+            else mds.BusinessPhotoPublishResponse.new_from_json_dict(data)
+        )
+
     def get_video_comments(
         self,
         business_id: str,

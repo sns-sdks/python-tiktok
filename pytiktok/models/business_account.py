@@ -179,6 +179,19 @@ class BusinessVideoPublishResponse(BusinessBaseResponse):
 
 
 @dataclass
+class BusinessPhotoPublish(BusinessVideoPublish):
+    """
+    https://business-api.tiktok.com/portal/docs?id=1803630424390658
+    """
+    ...
+
+
+@dataclass
+class BusinessPhotoPublishResponse(BusinessBaseResponse):
+    data: Optional[BusinessPhotoPublish] = field(default=None)
+
+
+@dataclass
 class BusinessComment(BaseModel):
     """
     Refer: https://ads.tiktok.com/marketing_api/docs?id=1733329505077250
