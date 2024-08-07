@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.1.9](https://github.com/sns-sdks/python-tiktok/v0.1.9) (2024-08-07)
+
+### Features
+
+- Add api for URL properties manage.
+- Add api for publish photo post.
+- Add api for revoke access token.
+- Remove Python3.6 support.
+- Remove deprecated version v1.2
+
 ## [0.1.8](https://github.com/sns-sdks/python-tiktok/v0.1.8) (2024-02-22)
 
 ### Fix
