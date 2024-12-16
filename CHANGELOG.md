@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.1.10](https://github.com/sns-sdks/python-tiktok/v0.1.10) (2024-12-16)
+
+### Features
+
+- Add api for get account post privacy setting
+- Add api for get post publish status
+- fix fields type in get data.
+
 ## [0.1.9](https://github.com/sns-sdks/python-tiktok/v0.1.9) (2024-08-07)
 
 ### Features
@@ -35,7 +43,7 @@ All notable changes to this project will be documented in this file.
 
 ### Fix
 
-- fix sometimes the `requests` module raise the `JSONDecodeError not found`. 
+- fix sometimes the `requests` module raise the `JSONDecodeError not found`.
 
 ## [0.1.4](https://github.com/sns-sdks/python-tiktok/v0.1.4) (2022-08-23)
 
