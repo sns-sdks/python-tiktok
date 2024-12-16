@@ -2,6 +2,7 @@
     Core API impl.
 """
 
+import json
 from typing import Optional, List, Union
 
 import requests
@@ -39,6 +40,12 @@ class BusinessAccountApi:
         # oauth redirect uri
         # Must be the same as the TikTok account holder redirect URL set in the app.
         self.oauth_redirect_uri = oauth_redirect_uri
+
+    @staticmethod
+    def _format_fields(fields):
+        if isinstance(fields, str):
+            return fields
+        return json.dumps(fields)
 
     def generate_access_token(
         self, code: str, redirect_uri: Optional[str] = None, return_json: bool = False
@@ -235,7 +242,7 @@ class BusinessAccountApi:
         if end_date is not None:
             params["end_date"] = end_date
         if fields is not None:
-            params["fields"] = fields
+            params["fields"] = self._format_fields(fields)
 
         resp = self._request(path="business/get/", params=params)
         data = self.parse_response(resp)
@@ -268,7 +275,7 @@ class BusinessAccountApi:
 
         params = {"business_id": business_id}
         if fields is not None:
-            params["fields"] = fields
+            params["fields"] = self._format_fields(fields)
         if filters is not None:
             params["filters"] = filters
         if cursor is not None:
@@ -282,6 +289,26 @@ class BusinessAccountApi:
         data = self.parse_response(resp)
         return (
             data if return_json else mds.BusinessVideosResponse.new_from_json_dict(data)
+        )
+
+    def get_account_post_privacy(
+        self,
+        business_id: str,
+        return_json: bool = False,
+    ) -> Union[mds.BusinessAccountPrivacySettingResponse, dict]:
+        """
+        Get the post privacy settings of a TikTok account.
+        :param business_id: Application specific unique identifier for the TikTok account.
+        :param return_json: Type for returned data. If you set True JSON data will be returned.
+        :return: Account's post privacy setting
+        """
+        params = {"business_id": business_id}
+        resp = self._request(path="business/video/settings/", params=params)
+        data = self.parse_response(resp)
+        return (
+            data
+            if return_json
+            else mds.BusinessAccountPrivacySettingResponse.new_from_json_dict(data)
         )
 
     def create_video(
@@ -349,6 +376,28 @@ class BusinessAccountApi:
             data
             if return_json
             else mds.BusinessPhotoPublishResponse.new_from_json_dict(data)
+        )
+
+    def get_publish_status(
+        self,
+        business_id: str,
+        publish_id: str,
+        return_json: bool = False,
+    ) -> Union[mds.BusinessPublishStatusResponse, dict]:
+        """
+        Get the publishing status of a TikTok video post or photo post.
+        :param business_id: Application specific unique identifier for the TikTok account.
+        :param publish_id: Unique identifier for a post publishing task. Value of the `share_id`.
+        :param return_json: Type for returned data. If you set True JSON data will be returned.
+        :return: publish status
+        """
+        params = {"business_id": business_id, "publish_id": publish_id}
+        resp = self._request(path="business/publish/status/", params=params)
+        data = self.parse_response(resp)
+        return (
+            data
+            if return_json
+            else mds.BusinessPublishStatusResponse.new_from_json_dict(data)
         )
 
     def get_video_comments(
