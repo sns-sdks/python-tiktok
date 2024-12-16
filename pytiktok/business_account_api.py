@@ -1,7 +1,7 @@
 """
     Core API impl.
 """
-
+import json
 from typing import Optional, List, Union
 
 import requests
@@ -39,6 +39,12 @@ class BusinessAccountApi:
         # oauth redirect uri
         # Must be the same as the TikTok account holder redirect URL set in the app.
         self.oauth_redirect_uri = oauth_redirect_uri
+
+    @staticmethod
+    def _format_fields(fields):
+        if isinstance(fields, str):
+            return fields
+        return json.dumps(fields)
 
     def generate_access_token(
         self, code: str, redirect_uri: Optional[str] = None, return_json: bool = False
@@ -235,7 +241,7 @@ class BusinessAccountApi:
         if end_date is not None:
             params["end_date"] = end_date
         if fields is not None:
-            params["fields"] = fields
+            params["fields"] = self._format_fields(fields)
 
         resp = self._request(path="business/get/", params=params)
         data = self.parse_response(resp)
@@ -268,7 +274,7 @@ class BusinessAccountApi:
 
         params = {"business_id": business_id}
         if fields is not None:
-            params["fields"] = fields
+            params["fields"] = self._format_fields(fields)
         if filters is not None:
             params["filters"] = filters
         if cursor is not None:
