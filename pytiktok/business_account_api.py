@@ -290,6 +290,26 @@ class BusinessAccountApi:
             data if return_json else mds.BusinessVideosResponse.new_from_json_dict(data)
         )
 
+    def get_account_post_privacy(
+        self,
+        business_id: str,
+        return_json: bool = False,
+    ) -> Union[mds.BusinessAccountPrivacySettingResponse, dict]:
+        """
+        Get the post privacy settings of a TikTok account.
+        :param business_id: Application specific unique identifier for the TikTok account.
+        :param return_json: Type for returned data. If you set True JSON data will be returned.
+        :return: Account's post privacy setting
+        """
+        params = {"business_id": business_id}
+        resp = self._request(path="business/video/settings/", params=params)
+        data = self.parse_response(resp)
+        return (
+            data
+            if return_json
+            else mds.BusinessAccountPrivacySettingResponse.new_from_json_dict(data)
+        )
+
     def create_video(
         self,
         business_id: str,

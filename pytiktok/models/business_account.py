@@ -112,6 +112,20 @@ class BusinessAccountResponse(BusinessBaseResponse):
 
 
 @dataclass
+class BusinessAccountPrivacySetting(BaseModel):
+    privacy_level_options: Optional[List[str]] = field(default=None)
+    comment_disabled: Optional[bool] = field(default=None)
+    duet_disabled: Optional[bool] = field(default=None)
+    stitch_disabled: Optional[bool] = field(default=None)
+    max_video_post_duration_sec: Optional[int] = field(default=None)
+
+
+@dataclass
+class BusinessAccountPrivacySettingResponse(BusinessBaseResponse):
+    data: Optional[BusinessAccountPrivacySetting] = field(default=None)
+
+
+@dataclass
 class BusinessVideoImpressionSource(BaseModel):
     impression_source: Optional[str] = field(default=None)
     percentage: Optional[float] = field(default=None)
