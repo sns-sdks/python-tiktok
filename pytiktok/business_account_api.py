@@ -1,6 +1,7 @@
 """
     Core API impl.
 """
+
 import json
 from typing import Optional, List, Union
 
@@ -375,6 +376,28 @@ class BusinessAccountApi:
             data
             if return_json
             else mds.BusinessPhotoPublishResponse.new_from_json_dict(data)
+        )
+
+    def get_publish_status(
+        self,
+        business_id: str,
+        publish_id: str,
+        return_json: bool = False,
+    ) -> Union[mds.BusinessPublishStatusResponse, dict]:
+        """
+        Get the publishing status of a TikTok video post or photo post.
+        :param business_id: Application specific unique identifier for the TikTok account.
+        :param publish_id: Unique identifier for a post publishing task. Value of the `share_id`.
+        :param return_json: Type for returned data. If you set True JSON data will be returned.
+        :return: publish status
+        """
+        params = {"business_id": business_id, "publish_id": publish_id}
+        resp = self._request(path="business/publish/status/", params=params)
+        data = self.parse_response(resp)
+        return (
+            data
+            if return_json
+            else mds.BusinessPublishStatusResponse.new_from_json_dict(data)
         )
 
     def get_video_comments(

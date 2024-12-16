@@ -207,6 +207,18 @@ class BusinessPhotoPublishResponse(BusinessBaseResponse):
 
 
 @dataclass
+class BusinessPublishStatus(BaseModel):
+    status: Optional[str] = field(default=None)
+    post_ids: Optional[List[str]] = field(default=None)
+    reason: Optional[str] = field(default=None)
+
+
+@dataclass
+class BusinessPublishStatusResponse(BusinessBaseResponse):
+    data: Optional[BusinessPublishStatus] = field(default=None)
+
+
+@dataclass
 class BusinessComment(BaseModel):
     """
     Refer: https://ads.tiktok.com/marketing_api/docs?id=1733329505077250
