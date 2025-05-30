@@ -1,5 +1,5 @@
 """
-    Core API impl.
+Core API impl.
 """
 
 import json

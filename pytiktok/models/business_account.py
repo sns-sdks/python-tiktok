@@ -1,5 +1,5 @@
 """
-    Models for business account.
+Models for business account.
 """
 
 from dataclasses import dataclass, field

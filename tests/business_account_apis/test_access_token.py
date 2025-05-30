@@ -1,5 +1,5 @@
 """
-    Tests for the access token API
+Tests for the access token API
 """
 
 import pytest

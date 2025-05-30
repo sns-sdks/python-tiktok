@@ -1,5 +1,5 @@
 """
-    Models for TikTok kit api.
+Models for TikTok kit api.
 """
 
 from dataclasses import dataclass, field
