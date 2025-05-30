@@ -1,5 +1,5 @@
 """
-    Api impl for tiktok developer
+Api impl for tiktok developer
 """
 
 import random
