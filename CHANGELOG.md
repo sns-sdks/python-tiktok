@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.1.11](https://github.com/sns-sdks/python-tiktok/v0.1.11) (2025-05-30)
+
+### Fix
+
+- make list type parameters well.
+
+
 ## [0.1.10](https://github.com/sns-sdks/python-tiktok/v0.1.10) (2024-12-16)
 
 ### Features
