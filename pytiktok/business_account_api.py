@@ -277,7 +277,7 @@ class BusinessAccountApi:
         if fields is not None:
             params["fields"] = self._format_fields(fields)
         if filters is not None:
-            params["filters"] = filters
+            params["filters"] = self._format_fields(filters)
         if cursor is not None:
             params["cursor"] = cursor
         if max_count is not None:
@@ -432,7 +432,7 @@ class BusinessAccountApi:
         """
         params = {"business_id": business_id, "video_id": video_id}
         if comment_ids is not None:
-            params["comment_ids"] = comment_ids
+            params["comment_ids"] = self._format_fields(comment_ids)
         if include_replies is not None:
             params["include_replies"] = include_replies
         if status is not None:
