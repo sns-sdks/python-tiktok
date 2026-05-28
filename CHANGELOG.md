@@ -2,12 +2,20 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.1.12](https://github.com/sns-sdks/python-tiktok/v0.1.12) (2026-05-28)
+
+### Features
+
+- Add new response fields for account and video.
+- Add new api for benchmarks
+- Add new api for upload comment image.
+
+
 ## [0.1.11](https://github.com/sns-sdks/python-tiktok/v0.1.11) (2025-05-30)
 
 ### Fix
 
 - make list type parameters well.
-
 
 ## [0.1.10](https://github.com/sns-sdks/python-tiktok/v0.1.10) (2024-12-16)
 
