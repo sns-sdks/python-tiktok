@@ -126,14 +126,18 @@ class BusinessAccount(BaseModel):
     following_count: Optional[int] = field(default=None, repr=False)
     total_likes: Optional[int] = field(default=None, repr=False)
     videos_count: Optional[int] = field(default=None, repr=False)
-    audience_ages: Optional[List[BusinessAccountAudienceAge]] = field(default=None, repr=False)
+    audience_ages: Optional[List[BusinessAccountAudienceAge]] = field(
+        default=None, repr=False
+    )
     audience_genders: Optional[List[BusinessAccountAudienceGender]] = field(
         default=None, repr=False
     )
     audience_countries: Optional[List[BusinessAccountAudienceCountry]] = field(
         default=None, repr=False
     )
-    audience_cities: Optional[List[BusinessAccountAudienceCity]] = field(default=None, repr=False)
+    audience_cities: Optional[List[BusinessAccountAudienceCity]] = field(
+        default=None, repr=False
+    )
     metrics: Optional[List[BusinessAccountMetric]] = field(default=None, repr=False)
 
 
@@ -231,7 +235,8 @@ class BusinessVideo(BaseModel):
     email_clicks: Optional[int] = field(default=None, repr=False)
     address_clicks: Optional[int] = field(default=None, repr=False)
     video_view_retention: Optional[List[BusinessVideoVideoViewRetention]] = field(
-        default=None, repr=False)
+        default=None, repr=False
+    )
     impression_sources: Optional[List[BusinessVideoImpressionSource]] = field(
         default=None, repr=False
     )
@@ -354,6 +359,7 @@ class BusinessCommentImage(BaseModel):
     """
     Refer: https://business-api.tiktok.com/portal/docs?id=1856212334897154
     """
+
     image_uri: Optional[str] = field(default=None)
     width: Optional[int] = field(default=None)
     height: Optional[int] = field(default=None)

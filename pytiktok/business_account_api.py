@@ -1,6 +1,7 @@
 """
 Core API impl.
 """
+
 import io
 import json
 from typing import Optional, List, Union
@@ -515,8 +516,9 @@ class BusinessAccountApi:
             else mds.BusinessCommentsResponse.new_from_json_dict(data)
         )
 
-    def upload_comment_image(self, business_id: str, image_data: bytes, return_json: bool = False) -> Union[
-        mds.BusinessCommentImageResponse, dict]:
+    def upload_comment_image(
+        self, business_id: str, image_data: bytes, return_json: bool = False
+    ) -> Union[mds.BusinessCommentImageResponse, dict]:
         """
         upload an image for a new comment or for a reply to an existing comment.
         :param business_id: Application specific unique identifier for the TikTok account.
@@ -546,7 +548,7 @@ class BusinessAccountApi:
         image_uri: Optional[str] = None,
         image_width: Optional[int] = None,
         image_height: Optional[int] = None,
-        return_json: bool = False
+        return_json: bool = False,
     ) -> Union[mds.BusinessCommentResponse, dict]:
         """
         :param business_id: Application specific unique identifier for the TikTok account.
