@@ -1,7 +1,7 @@
 """
 Core API impl.
 """
-
+import io
 import json
 from typing import Optional, List, Union
 
@@ -169,6 +169,7 @@ class BusinessAccountApi:
         params: Optional[dict] = None,
         data: Optional[dict] = None,
         json: Optional[dict] = None,
+        files: Optional[dict] = None,
         enforce_auth: bool = True,
     ) -> Response:
         """
@@ -178,6 +179,7 @@ class BusinessAccountApi:
         :param params: The url params to send in the body of the request.
         :param data: The form data to send in the body of the request.
         :param json: The json data to send in the body of the request.
+        :param files: Files to send in the body of the request.
         :param enforce_auth: Does the request require authentication.
         :return: A json object
         """
@@ -197,6 +199,7 @@ class BusinessAccountApi:
             params=params,
             data=data,
             json=json,
+            files=files,
             timeout=self.timeout,
             proxies=self.proxies,
         )
@@ -316,6 +319,7 @@ class BusinessAccountApi:
         business_id: str,
         video_url: str,
         post_info: dict,
+        custom_thumbnail_url: Optional[str] = None,
         return_json: bool = False,
     ) -> Union[mds.BusinessVideoPublishResponse, dict]:
         """
@@ -324,6 +328,8 @@ class BusinessAccountApi:
         :param business_id: Application specific unique identifier for the TikTok account.
         :param video_url: A publicly accessible HTTP(s) URL for the video content to be published -
             with a minimum recommended TTL of 30 minutes.
+        :param custom_thumbnail_url: A publicly accessible HTTP(s) URL for a custom image to be used as the video’s cover photo.
+            When custom_thumbnail_url is specified, thumbnail_offset will be ignored.
         :param post_info: Required field.
             Pass empty object if not using caption, disable_comment, disable_duet or disable_stitch.
         :param return_json: Type for returned data. If you set True JSON data will be returned.
@@ -334,6 +340,8 @@ class BusinessAccountApi:
             "video_url": video_url,
             "post_info": post_info,
         }
+        if custom_thumbnail_url is not None:
+            data["custom_thumbnail_url"] = custom_thumbnail_url
 
         resp = self._request(verb="POST", path="business/video/publish/", json=data)
         data = self.parse_response(resp)
@@ -507,17 +515,56 @@ class BusinessAccountApi:
             else mds.BusinessCommentsResponse.new_from_json_dict(data)
         )
 
+    def upload_comment_image(self, business_id: str, image_data: bytes, return_json: bool = False) -> Union[
+        mds.BusinessCommentImageResponse, dict]:
+        """
+        upload an image for a new comment or for a reply to an existing comment.
+        :param business_id: Application specific unique identifier for the TikTok account.
+        :param image_data: Image file bytes data.
+        :param return_json: Type for returned data. If you set True JSON data will be returned.
+        :return: Comment Image's data.
+        """
+        files = {"image_file": io.BytesIO(image_data)}
+        resp = self._request(
+            verb="POST",
+            path="business/comment/image/upload/",
+            data={"business_id": business_id},
+            files=files,
+        )
+        data = self.parse_response(resp)
+        return (
+            data
+            if return_json
+            else mds.BusinessCommentImageResponse.new_from_json_dict(data)
+        )
+
     def create_comment(
-        self, business_id: str, video_id: str, text: str, return_json: bool = False
+        self,
+        business_id: str,
+        video_id: str,
+        text: Optional[str] = None,
+        image_uri: Optional[str] = None,
+        image_width: Optional[int] = None,
+        image_height: Optional[int] = None,
+        return_json: bool = False
     ) -> Union[mds.BusinessCommentResponse, dict]:
         """
         :param business_id: Application specific unique identifier for the TikTok account.
         :param video_id: Unique identifier for owned TikTok video to create comments on.
         :param text: Text content of the comment to create. Max length of 150 characters.
+        :param image_uri: URI for the reply image. Returned by upload endpoint.
+        :param image_width: Required when image_uri is specified. Returned by upload endpoint.
+        :param image_height: Required when image_uri is specified. Returned by upload endpoint.
         :param return_json: Type for returned data. If you set True JSON data will be returned.
         :return: Comment's data.
         """
-        data = {"business_id": business_id, "video_id": video_id, "text": text}
+        data = {"business_id": business_id, "video_id": video_id}
+        if text is not None:
+            data["text"] = text
+        if image_uri is not None:
+            data["image_uri"] = image_uri
+            data["image_width"] = image_width
+            data["image_height"] = image_height
 
         resp = self._request(verb="POST", path="business/comment/create/", json=data)
         data = self.parse_response(resp)
@@ -532,7 +579,10 @@ class BusinessAccountApi:
         business_id: str,
         video_id: str,
         comment_id: str,
-        text: str,
+        text: Optional[str] = None,
+        image_uri: Optional[str] = None,
+        image_width: Optional[int] = None,
+        image_height: Optional[int] = None,
         return_json: bool = False,
     ) -> Union[mds.BusinessCommentResponse, dict]:
         """
@@ -540,6 +590,9 @@ class BusinessAccountApi:
         :param video_id: Unique identifier for owned TikTok video to create comments on.
         :param comment_id: Unique identifier for comment on an owned TikTok video to create reply on.
         :param text: Text content of the comment to create. Max length of 150 characters.
+        :param image_uri: URI for the reply image. Returned by upload endpoint.
+        :param image_width: Required when image_uri is specified. Returned by upload endpoint.
+        :param image_height: Required when image_uri is specified. Returned by upload endpoint.
         :param return_json: Type for returned data. If you set True JSON data will be returned.
         :return: Comment's data.
         """
@@ -547,8 +600,13 @@ class BusinessAccountApi:
             "business_id": business_id,
             "video_id": video_id,
             "comment_id": comment_id,
-            "text": text,
         }
+        if text is not None:
+            data["text"] = text
+        if image_uri is not None:
+            data["image_uri"] = image_uri
+            data["image_width"] = image_width
+            data["image_height"] = image_height
 
         resp = self._request(
             verb="POST", path="business/comment/reply/create/", json=data
@@ -812,4 +870,23 @@ class BusinessAccountApi:
             data
             if return_json
             else mds.BusinessUrlPropertyInfoListResponse.new_from_json_dict(data)
+        )
+
+    def get_business_category_benchmarks(
+        self, business_id: str, business_category: str, return_json: bool = False
+    ) -> Union[mds.BusinessCategoryBenchmarksResponse, dict]:
+        """
+        To retrieve the benchmarks specific to a business category.
+        :param business_id: Application specific unique identifier for the TikTok account.
+        :param business_category: Business category. For enum values, see List of values for [business_category](https://business-api.tiktok.com/gateway/docs/index?identify_key=c0138ffadd90a955c1f0670a56fe348d1d40680b3c89461e09f78ed26785164b&language=ENGLISH&doc_id=1822388944791617#item-link-List%20of%20values%20for%20business_category).
+        :param return_json: Type for returned data. If you set True JSON data will be returned.
+        :return: Benchmark response.
+        """
+        params = {"business_id": business_id, "business_category": business_category}
+        resp = self._request(verb="GET", path="business/benchmark/", params=params)
+        data = self.parse_response(resp)
+        return (
+            data
+            if return_json
+            else mds.BusinessCategoryBenchmarksResponse.new_from_json_dict(data)
         )
